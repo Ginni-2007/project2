@@ -1,4 +1,4 @@
-resultId,raceId,driverId,number,grid,position,positionOrder,points,laps,fastestLapOrder,fastestLapTime,statusId
+resultId,raceId,driverId,number,grid,position,positionOrderUse,points,laps,fastestLapOrder,fastestLapTime,statusId
 23379,969,20,5,2,1,1,25,57,3,1:26.638,1
 23380,969,1,44,1,2,2,18,57,6,1:27.033,1
 23381,969,822,77,3,3,3,15,57,2,1:26.593,1
