@@ -4,7 +4,7 @@
 # rhfiwaheglgrehiwh
 class Graph:
     """
-    still need to add
+    still need to add the first one
     """
 
     _drivers: list[Driver]
