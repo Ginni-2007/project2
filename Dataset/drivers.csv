@@ -1,0 +1,46 @@
+driverId,driverRef,number,code,forename,surname,nationality
+1,hamilton,44,HAM,Lewis,Hamilton,British
+4,alonso,14,ALO,Fernando,Alonso,Spanish
+8,raikkonen,7,RAI,Kimi,Räikkönen,Finnish
+9,kubica,88,KUB,Robert,Kubica,Polish
+13,massa,19,MAS,Felipe,Massa,Brazilian
+18,button,22,BUT,Jenson,Button,British
+20,vettel,5,VET,Sebastian,Vettel,German
+154,grosjean,8,GRO,Romain,Grosjean,French
+842,gasly,10,GAS,Pierre,Gasly,French
+807,hulkenberg,27,HUL,Nico,Hülkenberg,German
+814,resta,40,DIR,Paul,di Resta,British
+815,perez,11,PER,Sergio,Pérez,Mexican
+817,ricciardo,3,RIC,Daniel,Ricciardo,Australian
+822,bottas,77,BOT,Valtteri,Bottas,Finnish
+825,kevin_magnussen,20,MAG,Kevin,Magnussen,Danish
+826,kvyat,26,KVY,Daniil,Kvyat,Russian
+828,ericsson,9,ERI,Marcus,Ericsson,Swedish
+830,max_verstappen,33,VER,Max,Verstappen,Dutch
+832,sainz,55,SAI,Carlos,Sainz,Spanish
+835,jolyon_palmer,30,PAL,Jolyon,Palmer,British
+836,wehrlein,94,WEH,Pascal,Wehrlein,German
+838,vandoorne,2,VAN,Stoffel,Vandoorne,Belgian
+839,ocon,31,OCO,Esteban,Ocon,French
+840,stroll,18,STR,Lance,Stroll,Canadian
+841,giovinazzi,99,GIO,Antonio,Giovinazzi,Italian
+843,brendon_hartley,28,HAR,Brendon,Hartley,New Zealander
+844,leclerc,16,LEC,Charles,Leclerc,Monegasque
+845,sirotkin,35,SIR,Sergey,Sirotkin,Russian
+846,norris,4,NOR,Lando,Norris,British
+847,russell,63,RUS,George,Russell,British
+848,albon,23,ALB,Alexander,Albon,Thai
+849,latifi,6,LAT,Nicholas,Latifi,Canadian
+850,pietro_fittipaldi,51,FIT,Pietro,Fittipaldi,Brazilian
+851,aitken,89,AIT,Jack,Aitken,British
+852,tsunoda,22,TSU,Yuki,Tsunoda,Japanese
+853,mazepin,9,MAZ,Nikita,Mazepin,Russian
+854,mick_schumacher,47,MSC,Mick,Schumacher,German
+855,zhou,24,ZHO,Guanyu,Zhou,Chinese
+856,de_vries,21,DEV,Nyck,de Vries,Dutch
+857,piastri,81,PIA,Oscar,Piastri,Australian
+858,sargeant,2,SAR,Logan,Sargeant,American
+859,lawson,30,LAW,Liam,Lawson,New Zealander
+860,bearman,38,BEA,Oliver,Bearman,British
+861,colapinto,43,COL,Franco,Colapinto,Argentinian
+862,doohan,61,DOO,Jack,Doohan,Australian
