@@ -14,9 +14,9 @@ class Graph:
         self._drivers = {}
         self._races = {}
 
-    def add_driver(self, id: int, )-> None:
+    def add_driver(self, id: int, name: str)-> None:
         if id not in self._drivers:
-            self._drivers[id] = Driver(the needed parameters)
+            self._drivers[id] = Driver(id, name)
 
     def add_race(self, race_id: int, name: str, circuit_id: int) -> None:
         if id not in self._races:
@@ -28,6 +28,11 @@ class Graph:
             raise ValueError
 
         self._races[race_id].add_driver(driver_id, self._drivers[driver_id])
+    def add_edge(self):
+        for race in self._races.values():
+            for d1, d2 in race.get_all_driver_pairs():
+                d1.add_opponent(d2)
+                d2.add_opponent(d1
 
 
 class Race:
@@ -80,6 +85,23 @@ class Driver:
     A single racer
     rigisehbiejgliszm
     """
+    driver_id: int
+    name: str
+    neighbours: set[Driver]
+    racer_to_races: dict[Driver, set[int]]
+
+    def __init__(self, driver_id: int, name: str) -> None:
+        self.driver_id = driver_id
+        self.name = name
+        self.neighbours = {}
+        self.racer_to_races = {}
+
+    def add_opponenets(self, other_driver: Driver):
+        if other_driver not in self.neighbours:
+            self.neighbours.add(Driver)
+
+    def get_races_against(self, other_driver: Driver) -> set[int]:
+        return self.racer_to_races[other_driver]
 
 
 
