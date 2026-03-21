@@ -14,7 +14,7 @@ class Race:
     A Race vertex in the graph, used to represent a single race
 
     Instance Attributes:
-        - item: The data stored in this vertex, representing a user or book.
+        - item:
         - kind: The type of this vertex: 'user' or 'book'.
         - neighbours: The vertices that are adjacent to this vertex.
 
