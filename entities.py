@@ -74,6 +74,7 @@ class Race:
 
 
 
+
 class Driver:
     """
     A single racer
@@ -102,7 +103,7 @@ class RaceData:
         -
 
     """
-    raceID: str
+    raceID: int
     driver_id: int
     starting_position: int
     final_position: int
@@ -112,7 +113,8 @@ class RaceData:
     position_change: int
     finish_race: bool
 
-    def __init__(self, race_id: int, name: str, circuit_id: int) -> None:
+    def __init__(self, race_id: int, driver_id: int, starting_position: int, final_position: int,
+                 fastest_lap_order: int, is_sprint: bool, won_race: bool, finish_race: bool) -> None:
         """Initialize a new vertex with the given item and kind.
 
         This vertex is initialized with no neighbours.
@@ -120,11 +122,17 @@ class RaceData:
         Preconditions:
             - kind in {'user', 'book'}
         """
-        self._race_id = race_id
-        self._name = name
-        self._circuitID = circuit_id
+        self.raceID = race_id
+        self.driver_id = driver_id
+        self.starting_position = starting_position
+        self.final_position = final_position
+        self.fastest_lap_order = fastest_lap_order
+        self.is_sprint = is_sprint
+        self.won_race = won_race
+        self.finish_race = finish_race
 
-        self._drivers = {}
+        self.position_change = abs(self.starting_position - self.final_position)
+
 
 
 
