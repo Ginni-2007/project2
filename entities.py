@@ -31,8 +31,16 @@ class Graph:
     def add_edge(self):
         for race in self._races.values():
             for d1, d2 in race.get_all_driver_pairs():
-                d1.add_opponent(d2)
-                d2.add_opponent(d1
+                d1.add_opponent(d2, race.get_id())
+                d2.add_opponent(d1, race.get_id())
+
+        # for race in self._races.values():
+        #     race_drivers = race.get_drivers()
+        #     for driver1 in race_drivers:
+        #         for driver2 in race_drivers:
+        #             if driver2 in driver1.racer_to_races:
+        #                 driver1.racer_to_races[driver2].add(race)
+        #
 
 
 class Race:
@@ -67,6 +75,9 @@ class Race:
 
         self._drivers = {}
 
+    def get_id(self) -> int:
+        return self._race_id
+
     def add_driver(self, driver_id: int, driver: Driver) -> None:
         """
         Add the given driver to the drivers dictionary, if driver already present do nothing.
@@ -82,9 +93,9 @@ class Race:
             lst += self._drivers[driver]
         return lst
 
-    def connect_drivers(self):
+    def get_all_driver_pairs(self) -> list[tuple[Driver, Driver]]:
 
-
+        return [(self._drivers[a], self._drivers[a]) for a in self._drivers for b in self._drivers if a != b]
 
 
 class Driver:
@@ -100,12 +111,17 @@ class Driver:
     def __init__(self, driver_id: int, name: str) -> None:
         self.driver_id = driver_id
         self.name = name
-        self.neighbours = {}
+        self.neighbours = set()
         self.racer_to_races = {}
 
-    def add_opponenets(self, other_driver: Driver):
+    def add_opponenets(self, other_driver: Driver, race_id: int):
+        # if other_driver not in self.neighbours:
+        #     self.neighbours.add(Driver)
+
         if other_driver not in self.neighbours:
-            self.neighbours.add(Driver)
+            self.neighbours.add(other_driver)
+            self.racer_to_races[other_driver] = set()
+        self.racer_to_races[other_driver].add(race_id)
 
     def get_races_against(self, other_driver: Driver) -> set[int]:
         return self.racer_to_races[other_driver]
