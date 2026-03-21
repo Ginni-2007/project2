@@ -33,6 +33,8 @@ class Graph:
             for d1, d2 in race.get_all_driver_pairs():
                 d1.add_opponent(d2, race.get_id())
                 d2.add_opponent(d1, race.get_id())
+    def get_shared_races(self, d1: Driver, d2: Driver)-> set[int]:
+        return d1.get_races_against(d2)
 
 
 class Race:
