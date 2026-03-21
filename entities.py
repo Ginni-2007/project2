@@ -22,6 +22,12 @@ class Graph:
         if id not in self._races:
             self._races[race_id] = Race(race_id, name, circuit_id)
 
+    def add_driver_to_race(self, race_id: int, driver_id: int) -> None:
+
+        if race_id not in self._races or driver_id not in self._drivers:
+            raise ValueError
+
+        self._races[race_id].add_driver(driver_id, self._drivers[driver_id])
 
 
 class Race:
