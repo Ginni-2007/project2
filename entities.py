@@ -47,7 +47,7 @@ class Graph:
         if id not in self._races:
             self._races[race_id] = Race(race_id, name, circuit_id)
 
-    def add_driver_to_race(self, race_id: int, driver_id: int) -> None:
+    def add_driver_to_race(self, race_id: int, driver_id: int, driver_race_data: list) -> None:
         """
         Add a driver to a specific race.
         Raises ValueError if the race or driver does not exist.
@@ -59,7 +59,7 @@ class Graph:
         if race_id not in self._races or driver_id not in self._drivers:
             raise ValueError
 
-        self._races[race_id].add_driver(driver_id, self._drivers[driver_id])
+        self._races[race_id].add_driver(driver_id, self._drivers[driver_id], driver_race_data)
 
     def add_edge(self):
         """
@@ -115,13 +115,15 @@ class Race:
         """Return the ID of this race."""
         return self._race_id
 
-    def add_driver(self, driver_id: int, driver: Driver) -> None:
+    def add_driver(self, driver_id: int, driver: Driver, driver_race_data: list) -> None:
         """
         Add the given driver to the drivers dictionary, if driver already present do nothing.
+        driver_race_data is a list [startingposition, final position, fastest lap order, issprint, wonrace, positionchange, finish race]
         """
         if driver_id in self._drivers:
             return
         self._drivers[driver_id] = driver
+        driver.add_race_data(self._race_id, driver_id, driver_race_data)
 
     def get_drivers(self) -> list[Driver]:
         """Return a list of all drivers participating in this race."""
@@ -159,6 +161,7 @@ class Driver:
     name: str
     neighbours: set[Driver]
     racer_to_races: dict[Driver, set[int]]
+    past_races: dict[int, RaceData]
 
     def __init__(self, driver_id: int, name: str) -> None:
         """
@@ -186,6 +189,12 @@ class Driver:
             - other_driver is in self.neighbours
         """
         return self.racer_to_races[other_driver]
+
+    def add_race_data(self, driver_race_data: list) -> None:
+        race_data = RaceData(driver_race_data[0], driver_race_data[1], driver_race_data[2], driver_race_data[3],
+                             driver_race_data[4], driver_race_data[5], driver_race_data[6], driver_race_data[7],
+                             driver_race_data[8])
+        self.past_races[driver_race_data[0]] = race_data
 
 
 class RaceData:
