@@ -116,6 +116,7 @@ class Race:
         return self._race_id
 
     def num_drivers(self) -> int:
+        """Return number of drivers that raced"""
         return len(self._drivers)
 
     def add_driver(self, driver_id: int, driver: Driver, driver_race_data: list) -> None:
