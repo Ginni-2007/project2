@@ -5,7 +5,22 @@ class Graph:
     """
     oiergjoiergjeoirgjoeaigjoisj
     """
+    _drivers: dict[int, Driver]
+    _races: dict[int, Race]
 
+    def __init__(self) -> None:
+        """In
+        """
+        self._drivers = {}
+        self._races = {}
+
+    def add_driver(self, id: int, )-> None:
+        if id not in self._drivers:
+            self._drivers[id] = Driver(the needed parameters)
+
+    def add_race(self, race_id: int, name: str, circuit_id: int) -> None:
+        if id not in self._races:
+            self._races[race_id] = Race(race_id, name, circuit_id)
 
 
 
@@ -91,6 +106,19 @@ class RaceData:
     position_change: int
     finish_race: bool
 
+    def __init__(self, race_id: int, name: str, circuit_id: int) -> None:
+        """Initialize a new vertex with the given item and kind.
+
+        This vertex is initialized with no neighbours.
+
+        Preconditions:
+            - kind in {'user', 'book'}
+        """
+        self._race_id = race_id
+        self._name = name
+        self._circuitID = circuit_id
+
+        self._drivers = {}
 
 
 
