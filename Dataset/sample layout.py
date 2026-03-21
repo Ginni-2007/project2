@@ -19,10 +19,12 @@ class Graph:
         """
         adds a race to the _races
         """
+
     def add_race_data(self):
         """
         add race data from results.csv
         """
+
 
 class Race:
     """
@@ -37,6 +39,7 @@ class Race:
         """
 
         """
+
     def connect_drivers(self):
         """
         connects all the drivers in a given race
@@ -48,19 +51,21 @@ class Race:
                 else:
                     driver._racer_to_race[driver2] = set(self)
 
+
 class Driver:
     """
     A single racer
     """
     _name: str
     _raced_before_with: list[Driver]
-    _racer_to_raceID: dict[Driver, set[int]] # {diver name: the raceID they were together}
+    _racer_to_raceID: dict[Driver, set[int]]  # {diver name: the raceID they were together}
     _races: list[RaceData]
 
     def add_race(self):
         """
         adds the race to the list of races in a driver
         """
+
 
 class RaceData:
     """
