@@ -191,9 +191,11 @@ class Driver:
         return self.racer_to_races[other_driver]
 
     def add_race_data(self, driver_race_data: list) -> None:
-        race_data = RaceData(driver_race_data[0], driver_race_data[1], driver_race_data[2], driver_race_data[3],
-                             driver_race_data[4], driver_race_data[5], driver_race_data[6], driver_race_data[7],
-                             driver_race_data[8])
+        race_data = RaceData(race_id=driver_race_data[0], driver_id=driver_race_data[1],
+                             starting_position=driver_race_data[2], final_position=driver_race_data[3],
+                             fastest_lap_order=driver_race_data[4], is_sprint=driver_race_data[5],
+                             won_race=driver_race_data[6], position_change=driver_race_data[7],
+                             finish_race=driver_race_data[8])
         self.past_races[driver_race_data[0]] = race_data
 
 
