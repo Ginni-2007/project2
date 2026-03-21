@@ -34,14 +34,6 @@ class Graph:
                 d1.add_opponent(d2, race.get_id())
                 d2.add_opponent(d1, race.get_id())
 
-        # for race in self._races.values():
-        #     race_drivers = race.get_drivers()
-        #     for driver1 in race_drivers:
-        #         for driver2 in race_drivers:
-        #             if driver2 in driver1.racer_to_races:
-        #                 driver1.racer_to_races[driver2].add(race)
-        #
-
 
 class Race:
     """
@@ -95,7 +87,9 @@ class Race:
 
     def get_all_driver_pairs(self) -> list[tuple[Driver, Driver]]:
 
-        return [(self._drivers[a], self._drivers[a]) for a in self._drivers for b in self._drivers if a != b]
+        id_tuple = (sorted(a, b) for a in self._drivers for b in self._drivers if a != b)
+        final_tuple = [(self._drivers[x[0]], self._drivers[x[1]]) for x in id_tuple]
+        return final_tuple
 
 
 class Driver:
@@ -114,7 +108,7 @@ class Driver:
         self.neighbours = set()
         self.racer_to_races = {}
 
-    def add_opponenets(self, other_driver: Driver, race_id: int):
+    def add_opponent(self, other_driver: Driver, race_id: int):
         # if other_driver not in self.neighbours:
         #     self.neighbours.add(Driver)
 
