@@ -115,6 +115,9 @@ class Race:
         """Return the ID of this race."""
         return self._race_id
 
+    def num_drivers(self) -> int:
+        return len(self._drivers)
+
     def add_driver(self, driver_id: int, driver: Driver, driver_race_data: list) -> None:
         """
         Add the given driver to the drivers dictionary, if driver already present do nothing.
