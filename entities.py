@@ -75,6 +75,13 @@ class Race:
             return
         self._drivers[driver_id] = driver
 
+    def get_drivers(self)-> list[Driver]:
+
+        lst = []
+        for driver in self._drivers:
+            lst += self._drivers[driver]
+        return lst
+
     def connect_drivers(self):
 
 
