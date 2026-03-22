@@ -20,21 +20,19 @@ def load_f1_data(drivers_csv: str, races_csv: str, results_csv: str) -> Graph:
 
     # load the drivers first
     with open(drivers_csv, "r", encoding="utf-8") as f:
-        reader = csv.reader(f)
-        next(reader)
+        reader = csv.DictReader(f)
         for row in reader:
-            driver_id = row
-            full_name = row + " " + row
+            driver_id = int(row["driverId"])
+            full_name = row['forename'] + " " + row['surname']
             f1_graph.add_driver(driver_id, full_name)
 
     # load the races
     with open(races_csv, "r", encoding="utf-8") as f:
-        reader = csv.reader(f)
-        next(reader)
+        reader = csv.DictReader(f)
         for row in reader:
-            race_id = row
-            name = row
-            circuit_id = int(row)
+            race_id = int(row["raceId"])
+            name = row["name"]
+            circuit_id = int(row["circuitId"])
             f1_graph.add_race(race_id, name, circuit_id)
 
     # load the results

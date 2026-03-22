@@ -35,7 +35,7 @@ class Graph:
         Add a new driver to the graph.
 
         Preconditions:
-            - id >= 0
+            - driver_id >= 0
         """
         if driver_id not in self._drivers:
             self._drivers[driver_id] = Driver(driver_id, name)
