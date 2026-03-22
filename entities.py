@@ -221,25 +221,25 @@ def update_weight(driver1: Driver, driver2: Driver) -> int:
 
     return abs(sum_so_far1 - sum_so_far2)
 
-def calculate_one_race(driver: Driver, raceData: RaceData) -> int:
+def calculate_one_race(driver: Driver, race_data: RaceData) -> int:
 
     points = 0
-    if not raceData.finish_race:
+    if not race_data.finish_race:
         return 0
-    base_score = (raceData.race.num_drivers() - raceData.final_position) * 6
-    change_score = (raceData.starting_position - raceData.final_position) * 6
+    base_score = (race_data.race.num_drivers() - race_data.final_position) * 6
+    change_score = (race_data.starting_position - race_data.final_position) * 6
 
     points += (base_score + change_score)
-    if raceData.starting_position in {1,2,3} and raceData.final_position in {1,2,3}:
+    if race_data.starting_position in {1,2,3} and race_data.final_position in {1,2,3}:
         points += 15
 
-    if raceData.is_sprint:
+    if race_data.is_sprint:
         points *= 0.5
-    if raceData.fastest_lap_order == 1:
+    if race_data.fastest_lap_order == 1:
         points += 8
-    elif raceData.fastest_lap_order == 2:
+    elif race_data.fastest_lap_order == 2:
         points += 5
-    elif raceData.fastest_lap_order == 3:
+    elif race_data.fastest_lap_order == 3:
         points += 3
 
     return int(points)
