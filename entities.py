@@ -86,8 +86,14 @@ class Graph:
         """
         Compute the head-to-head strength between two drivers.
         Returns a dictionary with keys of different categories and values as tuples for driver d1, and d2
+        Preconditions:
+            - driver1 in driver2.neighbours and driver2 in driver1.neighbours
+            - driver1 in driver2.racer_to_races and driver2 in driver1.racer_to_races
         """
         common_races = self.get_shared_races(d1, d2)
+        if common_races == 0:
+            raise ValueError
+
         d1_finsihes_ahead = 0
         d2_finsihes_ahead = 0
 
@@ -104,40 +110,38 @@ class Graph:
         d2_podium = 0
 
         for race_id in common_races:
-            d1_value = d1.past_races.get(race_id).final_position
-            d2_value = d2.past_races.get(race_id).final_position
+            d1_value = d1.past_races[race_id]
+            d2_value = d2.past_races[race_id]
 
-            if d1_value < d2_value:
+            if d1_value.final_position < d2_value.final_position:
                 d1_finsihes_ahead += 1
-                if d1_value == 1:
-                    d1_wins += 1
-                    d1_podium += 1
             else:
                 d2_finsihes_ahead += 1
-                if d2_value == 1:
-                    d2_wins += 1
-                    d2_podium += 1
-            if d1_value in {2, 3}:
+
+            if d2_value.final_position == 1:
+                d2_wins += 1
+            if d1_value.final_position == 1:
+                d1_wins += 1
+
+            if d1_value.final_position in {1, 2, 3}:
                 d1_podium += 1
-            if d2_value in {2, 3}:
+            if d2_value.final_position in {1, 2, 3}:
                 d2_podium += 1
 
-            d1_avg_change_in_pos += d1.past_races.get(race_id).position_change
-            d2_avg_change_in_pos += d2.past_races.get(race_id).position_change
-
-            d1_value = d1.past_races.get(race_id).fastest_lap_order
-            d2_value = d2.past_races.get(race_id).fastest_lap_order
-
-            if d1_value > d2_value:
+            if d1_value.fastest_lap_order < d2_value.fastest_lap_order:
                 d1_fastest_lap += 1
             else:
                 d2_fastest_lap += 1
+
+            d1_avg_change_in_pos += d1_value.position_change
+            d2_avg_change_in_pos += d2_value.position_change
 
         return {
             '# of wins': (d1_wins, d2_wins),
             '# podium finishes': (d1_podium, d2_podium),
             '# of times each driver finished ahead of each other': (d1_finsihes_ahead, d2_finsihes_ahead),
-            'avg change in position': (d1_avg_change_in_pos, d2_avg_change_in_pos),
+            'avg change in position': (d1_avg_change_in_pos / len(common_races),
+                                       d2_avg_change_in_pos / len(common_races)),
             'fastest lap count': (d1_fastest_lap, d2_fastest_lap)
         }
 
