@@ -19,28 +19,30 @@ def load_f1_data(drivers_csv: str, races_csv: str, results_csv: str) -> Graph:
     f1_graph = Graph()
 
     # load the drivers first
-    with open(drivers_csv, 'r', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
+    with open(drivers_csv, "r", encoding="utf-8") as f:
+        reader = csv.reader(f)
+        next(reader)
         for row in reader:
-            driver_id = int(row['driverId'])
-            full_name = row['forename'] + " " + row['surname']
+            driver_id = row
+            full_name = row + " " + row
             f1_graph.add_driver(driver_id, full_name)
 
     # load the races
-    with open(races_csv, 'r', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
+    with open(races_csv, "r", encoding="utf-8") as f:
+        reader = csv.reader(f)
+        next(reader)
         for row in reader:
-            race_id = int(row['raceId'])
-            name = row['name']
-            circuit_id = int(row['circuitId'])
+            race_id = row
+            name = row
+            circuit_id = int(row)
             f1_graph.add_race(race_id, name, circuit_id)
 
     # load the results
-    with open(results_csv, 'r', encoding='utf-8') as f:
+    with open(results_csv, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            race_id = int(row['raceId'])
-            driver_id = int(row['driverId'])
+            race_id = int(row["raceId"])
+            driver_id = int(row["driverId"])
 
             driver_race_data = _get_driver_race_data(row)
 
@@ -56,19 +58,19 @@ def load_f1_data(drivers_csv: str, races_csv: str, results_csv: str) -> Graph:
 def _get_driver_race_data(row: dict) -> list:
     """Helper function to process a single row from results_csv and return the data that entities.py requires
     """
-    start_position = int(row['grid'])
+    start_position = int(row["grid"])
 
     # determine what the driver's final position was and finish status
-    if row['position'].isdigit():
-        final_position = int(row['position'])
+    if row["position"] != "\\N" and row["position"] != " ":
+        final_position = int(row["position"])
         finish_race = True
     else:
         final_position = 50
         finish_race = False
 
     # determine the fastest lap rank
-    if row['rank'].isdigit():
-        fastest_lap = int(row['rank'])
+    if row["fastestLapOrder"] != "\\N" and row["position"] != " ":
+        fastest_lap = int(row["fastestLapOrder"])
     else:
         fastest_lap = 99
 
@@ -84,7 +86,7 @@ def _get_driver_race_data(row: dict) -> list:
 if __name__ == "__main__":
     import python_ta
     python_ta.check_all(config={
-        'extra-imports': ['csv', 'entities'],
-        'allowed-io': ['load_f1_data'],
-        'max-line-length': 120
+        "extra-imports": ["csv", "entities"],
+        "allowed-io": ["load_f1_data"],
+        "max-line-length": 120
     })
