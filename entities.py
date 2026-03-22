@@ -71,6 +71,7 @@ class Graph:
                 d1.add_opponent(d2, race.get_id())
                 d2.add_opponent(d1, race.get_id())
 
+
     def get_shared_races(self, d1: Driver, d2: Driver) -> set[int]:
         """Return the set of race IDs where both drivers competed together.
 
@@ -127,7 +128,7 @@ class Race:
         if driver_id in self._drivers:
             return
         self._drivers[driver_id] = driver
-        driver.add_race_data(self._race_id, driver_id, driver_race_data)
+        driver.add_race_data(self, driver_id, driver_race_data)
 
     def get_drivers(self) -> list[Driver]:
         """Return a list of all drivers participating in this race."""
@@ -163,7 +164,7 @@ class Driver:
     """
     driver_id: int
     name: str
-    neighbours: set[Driver]
+    neighbours: dict[Driver, int]
     racer_to_races: dict[Driver, set[int]]
     past_races: dict[int, RaceData]
 
@@ -173,7 +174,7 @@ class Driver:
         """
         self.driver_id = driver_id
         self.name = name
-        self.neighbours = set()
+        self.neighbours = {}
         self.racer_to_races = {}
 
     def add_opponent(self, other_driver: Driver, race_id: int):
@@ -182,9 +183,11 @@ class Driver:
         If the opponent is new, add them to neighbours and initialize tracking.
         """
         if other_driver not in self.neighbours:
-            self.neighbours.add(other_driver)
+            self.neighbours[other_driver] = 0
             self.racer_to_races[other_driver] = set()
         self.racer_to_races[other_driver].add(race_id)
+
+        self.neighbours[other_driver] = update_weight(self, other_driver)
 
     def get_races_against(self, other_driver: Driver) -> set[int]:
         """
@@ -195,12 +198,51 @@ class Driver:
         return self.racer_to_races[other_driver]
 
     def add_race_data(self, driver_race_data: list) -> None:
-        race_data = RaceData(race_id=driver_race_data[0], driver_id=driver_race_data[1],
+        race_data = RaceData(race=driver_race_data[0], driver_id=driver_race_data[1],
                              starting_position=driver_race_data[2], final_position=driver_race_data[3],
                              fastest_lap_order=driver_race_data[4], is_sprint=driver_race_data[5],
                              won_race=driver_race_data[6], position_change=driver_race_data[7],
                              finish_race=driver_race_data[8])
         self.past_races[driver_race_data[0]] = race_data
+
+
+def update_weight(driver1: Driver, driver2: Driver) -> int:
+    sum_so_far1 = 0
+    sum_so_far2 = 0
+    common_race_ids = driver1.get_races_against(driver2)
+
+    for race_id in common_race_ids:
+        race = driver1.
+        sum_so_far1 += calculate_one_race(, driver1.past_races[race_id])
+        sum_so_far2 += calculate_one_race(driver2, driver2.past_races[race_id])
+
+    sum_so_far1 /= len(common_race_ids)
+    sum_so_far2 /= len(common_race_ids)
+
+    return abs(sum_so_far1 - sum_so_far2)
+
+def calculate_one_race(driver: Driver, raceData: RaceData) -> int:
+
+    points = 0
+    if not raceData.finish_race:
+        return 0
+    base_score = (raceData.race.num_drivers() - raceData.final_position) * 6
+    change_score = (raceData.starting_position - raceData.final_position) * 6
+
+    points += (base_score + change_score)
+    if raceData.starting_position in {1,2,3} and raceData.final_position in {1,2,3}:
+        points += 15
+
+    if raceData.is_sprint:
+        points *= 0.5
+    if raceData.fastest_lap_order == 1:
+        points += 8
+    elif raceData.fastest_lap_order == 2:
+        points += 5
+    elif raceData.fastest_lap_order == 3:
+        points += 3
+
+    return int(points)
 
 
 class RaceData:
@@ -222,7 +264,7 @@ class RaceData:
         -
 
     """
-    raceID: int
+    race: Race
     driver_id: int
     starting_position: int
     final_position: int
@@ -232,7 +274,7 @@ class RaceData:
     position_change: int
     finish_race: bool
 
-    def __init__(self, race_id: int, driver_id: int, starting_position: int, final_position: int,
+    def __init__(self, race: Race, driver_id: int, starting_position: int, final_position: int,
                  fastest_lap_order: int, is_sprint: bool, won_race: bool, finish_race: bool) -> None:
         """Initialize a new vertex with the given item and kind.
 
@@ -241,7 +283,7 @@ class RaceData:
         Preconditions:
             - kind in {'user', 'book'}
         """
-        self.raceID = race_id
+        self.race = race
         self.driver_id = driver_id
         self.starting_position = starting_position
         self.final_position = final_position
