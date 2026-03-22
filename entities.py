@@ -27,15 +27,15 @@ class Graph:
         self._drivers = {}
         self._races = {}
 
-    def add_driver(self, id: int, name: str) -> None:
+    def add_driver(self, driver_id: int, name: str) -> None:
         """
         Add a new driver to the graph.
 
         Preconditions:
             - id >= 0
         """
-        if id not in self._drivers:
-            self._drivers[id] = Driver(id, name)
+        if driver_id not in self._drivers:
+            self._drivers[driver_id] = Driver(driver_id, name)
 
     def add_race(self, race_id: int, name: str, circuit_id: int) -> None:
         """
@@ -122,7 +122,8 @@ class Race:
     def add_driver(self, driver_id: int, driver: Driver, driver_race_data: list) -> None:
         """
         Add the given driver to the drivers dictionary, if driver already present do nothing.
-        driver_race_data is a list [startingposition, final position, fastest lap order, issprint, wonrace, positionchange, finish race]
+        driver_race_data is a list [startingposition, final position, fastest lap order, issprint, wonrace,
+        positionchange, finish race]
         """
         if driver_id in self._drivers:
             return
@@ -197,6 +198,7 @@ class Driver:
         return self.racer_to_races[other_driver]
 
     def add_race_data(self, driver_race_data: list) -> None:
+        """Add the driver's data for a given race to an instance of RaceData"""
         race_data = RaceData(race=driver_race_data[0], driver_id=driver_race_data[1],
                              starting_position=driver_race_data[2], final_position=driver_race_data[3],
                              fastest_lap_order=driver_race_data[4], is_sprint=driver_race_data[5],
@@ -206,6 +208,7 @@ class Driver:
 
 
 def update_weight(driver1: Driver, driver2: Driver) -> int:
+    """Updates the weight between the two drivers"""
     sum_so_far1 = 0
     sum_so_far2 = 0
     common_race_ids = driver1.get_races_against(driver2)
@@ -221,6 +224,7 @@ def update_weight(driver1: Driver, driver2: Driver) -> int:
 
 
 def calculate_one_race(race_data: RaceData) -> int:
+    """Compute the points for a driver in a particular race, using personalized points system. """
     points = 0
     if not race_data.finish_race:
         return 0
@@ -289,4 +293,4 @@ class RaceData:
         self.is_sprint = is_sprint
         self.won_race = won_race
         self.finish_race = finish_race
-        self.position_change = abs(self.starting_position - self.final_position)
+        self.position_change = self.starting_position - self.final_position
