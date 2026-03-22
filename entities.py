@@ -1,3 +1,6 @@
+"""
+TODO
+"""
 from __future__ import annotations
 from typing import Any
 
@@ -80,6 +83,10 @@ class Graph:
         return d1.get_races_against(d2)
 
     def compute_head_to_head(self, d1: Driver, d2: Driver) -> dict[str, tuple[int, int]]:
+        """
+        Compute the head-to-head strength between two drivers.
+        Returns a dictionary with keys of different categories and values as tuples for driver d1, and d2
+        """
         common_races = self.get_shared_races(d1, d2)
         d1_finsihes_ahead = 0
         d2_finsihes_ahead = 0
@@ -192,10 +199,23 @@ class Race:
             lst += self._drivers[driver]
         return lst
 
+    # OR TODO: return list(self._drivers.values())
+
     def get_all_driver_pairs(self) -> list[tuple[Driver, Driver]]:
         """
         Return all ordered pairs of distinct drivers in this race.
         Each pair represents two drivers who competed in the same race.
+        """
+        # TODO
+        """
+        or
+            drivers = get_drivers()
+            pairs = []
+    
+            for i in range(len(drivers)):
+                for j in range(i + 1, len(drivers)):
+                    pairs.append((drivers[i], drivers[j]))
+            return pairs
         """
         id_tuple = (sorted(a, b) for a in self._drivers for b in self._drivers if a != b)
         final_tuple = [(self._drivers[x[0]], self._drivers[x[1]]) for x in id_tuple]
@@ -210,8 +230,7 @@ class Driver:
         - driver_id: The unique ID of the driver
         - name: The name of the driver
         - neighbours: A set of drivers this driver has competed against
-        - racer_to_races: A mapping from a driver to the set of race IDs
-                          where they competed against this driver
+        - racer_to_races: A mapping from a driver to the set of race IDs where they competed against this driver
 
     Representation Invariants:
         - driver_id >= 0
@@ -231,6 +250,7 @@ class Driver:
         self.name = name
         self.neighbours = {}
         self.racer_to_races = {}
+        self.past_races = {}
 
     def add_opponent(self, other_driver: Driver, race_id: int):
         """
@@ -318,8 +338,7 @@ class RaceData:
         - finish_race: Did the racer finish the race
 
     Representation Invariants:
-        -
-
+        - TODO
     """
     race: Race
     driver_id: int
@@ -333,12 +352,8 @@ class RaceData:
 
     def __init__(self, race: Race, driver_id: int, starting_position: int, final_position: int,
                  fastest_lap_order: int, is_sprint: bool, won_race: bool, finish_race: bool) -> None:
-        """Initialize a new vertex with the given item and kind.
-
-        This vertex is initialized with no neighbours.
-
-        Preconditions:
-            - kind in {'user', 'book'}
+        """
+        TODO
         """
         self.race = race
         self.driver_id = driver_id
