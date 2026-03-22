@@ -220,7 +220,7 @@ def update_weight(driver1: Driver, driver2: Driver) -> int:
     return abs(sum_so_far1 - sum_so_far2)
 
 
-def calculate_one_race(driver: Driver, race_data: RaceData) -> int:
+def calculate_one_race(race_data: RaceData) -> int:
     points = 0
     if not race_data.finish_race:
         return 0
