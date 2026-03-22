@@ -353,8 +353,6 @@ def calculate_one_race(race_data: RaceData) -> int:
     if race_data.starting_position in {1, 2, 3} and race_data.final_position in {1, 2, 3}:
         points += 15
 
-    if race_data.is_sprint:
-        points *= 0.5
     if race_data.fastest_lap_order == 1:
         points += 8
     elif race_data.fastest_lap_order == 2:
@@ -362,6 +360,7 @@ def calculate_one_race(race_data: RaceData) -> int:
     elif race_data.fastest_lap_order == 3:
         points += 3
 
+    if race_data.is_sprint:
+        points *= 0.5
+
     return int(points)
-
-
