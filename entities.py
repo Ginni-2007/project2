@@ -145,6 +145,15 @@ class Graph:
             'fastest lap count': (d1_fastest_lap, d2_fastest_lap)
         }
 
+    def has_driver(self, driver_id: int) -> bool:
+        """Return whether driver_id is in this graph.
+        """
+        return driver_id in self._drivers
+
+    def has_race(self, race_id: int) -> bool:
+        """Return whether race_id is in this graph.
+        """
+        return race_id in self._races
 
 class Race:
     """
