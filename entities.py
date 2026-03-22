@@ -107,16 +107,16 @@ class Graph:
             d1_value = d1.past_races.get(race_id).final_position
             d2_value = d2.past_races.get(race_id).final_position
 
-            if d1_value > d2_value:
+            if d1_value < d2_value:
                 d1_finsihes_ahead += 1
-                if d1_value == 0:
+                if d1_value == 1:
                     d1_wins += 1
                     d1_podium += 1
             else:
                 d2_finsihes_ahead += 1
                 if d2_value == 1:
                     d2_wins += 1
-                    d1_podium += 1
+                    d2_podium += 1
             if d1_value in {2, 3}:
                 d1_podium += 1
             if d2_value in {2, 3}:
