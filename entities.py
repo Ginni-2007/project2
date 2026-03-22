@@ -47,7 +47,7 @@ class Graph:
         Preconditions:
             - race_id >= 0
         """
-        if id not in self._races:
+        if race_id not in self._races:
             self._races[race_id] = Race(race_id, name, circuit_id)
 
     def add_driver_to_race(self, race_id: int, driver_id: int, driver_race_data: list) -> None:
@@ -184,8 +184,7 @@ class Race:
     def add_driver(self, driver_id: int, driver: Driver, driver_race_data: list) -> None:
         """
         Add the given driver to the drivers dictionary, if driver already present do nothing.
-        driver_race_data is a list [startingposition, final position, fastest lap order, issprint, wonrace,
-        positionchange, finish race]
+        driver_race_data is a list [startingposition, final position, fastest lap order, issprint, wonrace, finish race]
         """
         if driver_id in self._drivers:
             return
@@ -261,18 +260,22 @@ class Driver:
         """
         return self.racer_to_races[other_driver]
 
-    def add_race_data(self, driver_race_data: list) -> None:
+    def add_race_data(self, race: Race, driverid: int, driver_race_data: list) -> None:
         """Add the driver's data for a given race to an instance of RaceData"""
-        race_data = RaceData(race=driver_race_data[0], driver_id=driver_race_data[1],
-                             starting_position=driver_race_data[2], final_position=driver_race_data[3],
-                             fastest_lap_order=driver_race_data[4], is_sprint=driver_race_data[5],
-                             won_race=driver_race_data[6], position_change=driver_race_data[7],
-                             finish_race=driver_race_data[8])
+        race_data = RaceData(race=race, driver_id=driverid,
+                             starting_position=driver_race_data[0], final_position=driver_race_data[1],
+                             fastest_lap_order=driver_race_data[2], is_sprint=driver_race_data[3],
+                             won_race=driver_race_data[4], finish_race=driver_race_data[5])
         self.past_races[driver_race_data[0]] = race_data
 
 
 def update_weight(driver1: Driver, driver2: Driver) -> int:
-    """Updates the weight between the two drivers"""
+    """Updates the weight between the two drivers
+
+    Preconditions:
+        - driver1 in driver2.neighbours and driver2 in driver1.neighbours
+        - driver1 in driver2.racer_to_races and driver2 in driver1.racer_to_races
+    """
     sum_so_far1 = 0
     sum_so_far2 = 0
     common_race_ids = driver1.get_races_against(driver2)
