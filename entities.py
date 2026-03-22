@@ -214,6 +214,53 @@ class Race:
         return pairs
 
 
+class RaceData:
+    """
+    Represent a specific race's data for a racer.
+
+    Instance Attributes:
+        - raceID: The id of the race
+        - driver_id: The id of the racer
+        - starting_position: The position at the start of the race
+        - final_position: The position at the end of the race
+        - fastest_lap_order: The fastest lap
+        - is_sprint: Is this a sprint race or not
+        - won_race: Did the racer win the race
+        - position_change: The difference in the starting and the final position
+        - finish_race: Did the racer finish the race
+
+    Representation Invariants:
+        - self.driver_id >= 0
+        - self.starting_position >= 1
+        - not self.won_race or (not self.finish_race)
+        - self.final_position >= 1
+        - self.fastest_lap_order >= 1
+    """
+    race: Race
+    driver_id: int
+    starting_position: int
+    final_position: int
+    fastest_lap_order: int
+    is_sprint: bool
+    won_race: bool
+    finish_race: bool
+
+    def __init__(self, race: Race, driver_id: int, starting_position: int, final_position: int,
+                 fastest_lap_order: int, is_sprint: bool, won_race: bool, finish_race: bool) -> None:
+        """
+        Initializes an instance of a RaceData for a single driver, storing various data values from the race results
+        """
+        self.race = race
+        self.driver_id = driver_id
+        self.starting_position = starting_position
+        self.final_position = final_position
+        self.fastest_lap_order = fastest_lap_order
+        self.is_sprint = is_sprint
+        self.won_race = won_race
+        self.finish_race = finish_race
+        self.position_change = self.starting_position - self.final_position
+
+
 class Driver:
     """
     A Driver object representing a single racer.
@@ -318,48 +365,3 @@ def calculate_one_race(race_data: RaceData) -> int:
     return int(points)
 
 
-class RaceData:
-    """
-    Represent a specific race's data for a racer.
-
-    Instance Attributes:
-        - raceID: The id of the race
-        - driver_id: The id of the racer
-        - starting_position: The position at the start of the race
-        - final_position: The position at the end of the race
-        - fastest_lap_order: The fastest lap
-        - is_sprint: Is this a sprint race or not
-        - won_race: Did the racer win the race
-        - position_change: The difference in the starting and the final position
-        - finish_race: Did the racer finish the race
-
-    Representation Invariants:
-        - self.driver_id >= 0
-        - self.starting_position >= 1
-        - not self.won_race or (not self.finish_race)
-        - self.final_position >= 1
-        - self.fastest_lap_order >= 1
-    """
-    race: Race
-    driver_id: int
-    starting_position: int
-    final_position: int
-    fastest_lap_order: int
-    is_sprint: bool
-    won_race: bool
-    finish_race: bool
-
-    def __init__(self, race: Race, driver_id: int, starting_position: int, final_position: int,
-                 fastest_lap_order: int, is_sprint: bool, won_race: bool, finish_race: bool) -> None:
-        """
-        Initializes an instance of a RaceData for a single driver, storing various data values from the race results
-        """
-        self.race = race
-        self.driver_id = driver_id
-        self.starting_position = starting_position
-        self.final_position = final_position
-        self.fastest_lap_order = fastest_lap_order
-        self.is_sprint = is_sprint
-        self.won_race = won_race
-        self.finish_race = finish_race
-        self.position_change = self.starting_position - self.final_position
