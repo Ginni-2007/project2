@@ -79,6 +79,61 @@ class Graph:
             """
         return d1.get_races_against(d2)
 
+    def compute_head_to_head(self, d1: Driver, d2: Driver) -> dict[str, tuple[int, int]]:
+        common_races = self.get_shared_races(d1, d2)
+        d1_finsihes_ahead = 0
+        d2_finsihes_ahead = 0
+
+        d1_wins = 0
+        d2_wins = 0
+
+        d1_avg_change_in_pos = 0
+        d2_avg_change_in_pos = 0
+
+        d1_fastest_lap = 0
+        d2_fastest_lap = 0
+
+        d1_podium = 0
+        d2_podium = 0
+
+        for race_id in common_races:
+            d1_value = d1.past_races.get(race_id).final_position
+            d2_value = d2.past_races.get(race_id).final_position
+
+            if d1_value > d2_value:
+                d1_finsihes_ahead += 1
+                if d1_value == 0:
+                    d1_wins += 1
+                    d1_podium += 1
+            else:
+                d2_finsihes_ahead += 1
+                if d2_value == 1:
+                    d2_wins += 1
+                    d1_podium += 1
+            if d1_value in {2, 3}:
+                d1_podium += 1
+            if d2_value in {2, 3}:
+                d2_podium += 1
+
+            d1_avg_change_in_pos += d1.past_races.get(race_id).position_change
+            d2_avg_change_in_pos += d2.past_races.get(race_id).position_change
+
+            d1_value = d1.past_races.get(race_id).fastest_lap_order
+            d2_value = d2.past_races.get(race_id).fastest_lap_order
+
+            if d1_value > d2_value:
+                d1_fastest_lap += 1
+            else:
+                d2_fastest_lap += 1
+
+        return {
+            '# of wins': (d1_wins, d2_wins),
+            '# podium finishes': (d1_podium, d2_podium),
+            '# of times each driver finished ahead of each other': (d1_finsihes_ahead, d2_finsihes_ahead),
+            'avg change in position': (d1_avg_change_in_pos, d2_avg_change_in_pos),
+            'fastest lap count': (d1_fastest_lap, d2_fastest_lap)
+        }
+
 
 class Race:
     """
