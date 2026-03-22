@@ -71,7 +71,6 @@ class Graph:
                 d1.add_opponent(d2, race.get_id())
                 d2.add_opponent(d1, race.get_id())
 
-
     def get_shared_races(self, d1: Driver, d2: Driver) -> set[int]:
         """Return the set of race IDs where both drivers competed together.
 
@@ -212,17 +211,16 @@ def update_weight(driver1: Driver, driver2: Driver) -> int:
     common_race_ids = driver1.get_races_against(driver2)
 
     for race_id in common_race_ids:
-        race = driver1.
-        sum_so_far1 += calculate_one_race(, driver1.past_races[race_id])
-        sum_so_far2 += calculate_one_race(driver2, driver2.past_races[race_id])
+        sum_so_far1 += calculate_one_race(driver1.past_races[race_id])
+        sum_so_far2 += calculate_one_race(driver2.past_races[race_id])
 
     sum_so_far1 /= len(common_race_ids)
     sum_so_far2 /= len(common_race_ids)
 
     return abs(sum_so_far1 - sum_so_far2)
 
-def calculate_one_race(driver: Driver, race_data: RaceData) -> int:
 
+def calculate_one_race(driver: Driver, race_data: RaceData) -> int:
     points = 0
     if not race_data.finish_race:
         return 0
@@ -230,7 +228,7 @@ def calculate_one_race(driver: Driver, race_data: RaceData) -> int:
     change_score = (race_data.starting_position - race_data.final_position) * 6
 
     points += (base_score + change_score)
-    if race_data.starting_position in {1,2,3} and race_data.final_position in {1,2,3}:
+    if race_data.starting_position in {1, 2, 3} and race_data.final_position in {1, 2, 3}:
         points += 15
 
     if race_data.is_sprint:
