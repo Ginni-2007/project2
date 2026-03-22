@@ -296,7 +296,7 @@ def calculate_one_race(race_data: RaceData) -> int:
     if not race_data.finish_race:
         return 0
     base_score = (race_data.race.num_drivers() - race_data.final_position) * 6
-    change_score = (race_data.starting_position - race_data.final_position) * 6
+    change_score = race_data.position_change * 6
 
     points += (base_score + change_score)
     if race_data.starting_position in {1, 2, 3} and race_data.final_position in {1, 2, 3}:
@@ -343,7 +343,6 @@ class RaceData:
     fastest_lap_order: int
     is_sprint: bool
     won_race: bool
-    position_change: int
     finish_race: bool
 
     def __init__(self, race: Race, driver_id: int, starting_position: int, final_position: int,
