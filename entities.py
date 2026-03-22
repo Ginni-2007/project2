@@ -194,32 +194,21 @@ class Race:
 
     def get_drivers(self) -> list[Driver]:
         """Return a list of all drivers participating in this race."""
-        lst = []
-        for driver in self._drivers:
-            lst += self._drivers[driver]
-        return lst
 
-    # OR TODO: return list(self._drivers.values())
+        return list(self._drivers.values())
 
     def get_all_driver_pairs(self) -> list[tuple[Driver, Driver]]:
         """
         Return all ordered pairs of distinct drivers in this race.
         Each pair represents two drivers who competed in the same race.
         """
-        # TODO
-        """
-        or
-            drivers = get_drivers()
-            pairs = []
-    
-            for i in range(len(drivers)):
-                for j in range(i + 1, len(drivers)):
-                    pairs.append((drivers[i], drivers[j]))
-            return pairs
-        """
-        id_tuple = (sorted(a, b) for a in self._drivers for b in self._drivers if a != b)
-        final_tuple = [(self._drivers[x[0]], self._drivers[x[1]]) for x in id_tuple]
-        return final_tuple
+        drivers = self.get_drivers()
+        pairs = []
+
+        for i in range(len(drivers)):
+            for j in range(i + 1, len(drivers)):
+                pairs.append((drivers[i], drivers[j]))
+        return pairs
 
 
 class Driver:
@@ -338,7 +327,11 @@ class RaceData:
         - finish_race: Did the racer finish the race
 
     Representation Invariants:
-        - TODO
+        - self.driver_id >= 0
+        - self.starting_position >= 1
+        - not self.won_race or (not self.finish_race)
+        - self.final_position >= 1
+        - self.fastest_lap_order >= 1
     """
     race: Race
     driver_id: int
@@ -353,7 +346,7 @@ class RaceData:
     def __init__(self, race: Race, driver_id: int, starting_position: int, final_position: int,
                  fastest_lap_order: int, is_sprint: bool, won_race: bool, finish_race: bool) -> None:
         """
-        TODO
+        Initializes an instance of a RaceData for a single driver, storing various data values from the race results
         """
         self.race = race
         self.driver_id = driver_id
