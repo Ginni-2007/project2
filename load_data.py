@@ -19,32 +19,76 @@ def load_f1_data(drivers_csv: str, races_csv: str, results_csv: str) -> Graph:
     f1_graph = Graph()
 
     # load the drivers first
+    # with open(drivers_csv, "r", encoding="utf-8") as f:
+    #     reader = csv.DictReader(f)
+    #     for row in reader:
+    #         driver_id = int(row["driverId"])
+    #         full_name = row['forename'] + " " + row['surname']
+    #         f1_graph.add_driver(driver_id, full_name)
+
     with open(drivers_csv, "r", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
+        reader = csv.reader(f)
+        header = next(reader)
+
+        driver_id_index = header.index("driverId")
+        forename_index = header.index("forename")
+        surname_index = header.index("surname")
+
         for row in reader:
-            driver_id = int(row["driverId"])
-            full_name = row['forename'] + " " + row['surname']
+            driver_id = int(row[driver_id_index])
+            full_name = row[forename_index] + " " + row[surname_index]
             f1_graph.add_driver(driver_id, full_name)
 
     # load the races
+    # with open(races_csv, "r", encoding="utf-8") as f:
+    #     reader = csv.DictReader(f)
+    #     for row in reader:
+    #         race_id = int(row["raceId"])
+    #         name = row["name"]
+    #         circuit_id = int(row["circuitId"])
+    #         f1_graph.add_race(race_id, name, circuit_id)
+
     with open(races_csv, "r", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
+        reader = csv.reader(f)
+        header = next(reader)
+
+        race_id_index = header.index("raceId")
+        name_index = header.index("name")
+        circuit_index = header.index("circuitId")
+
         for row in reader:
-            race_id = int(row["raceId"])
-            name = row["name"]
-            circuit_id = int(row["circuitId"])
+            race_id = int(row[race_id_index])
+            name = row[name_index]
+            circuit_id = int(row[circuit_index])
             f1_graph.add_race(race_id, name, circuit_id)
 
     # load the results
+    # with open(results_csv, "r", encoding="utf-8") as f:
+    #     reader = csv.DictReader(f)
+    #     for row in reader:
+    #         race_id = int(row["raceId"])
+    #         driver_id = int(row["driverId"])
+    #
+    #         driver_race_data = _get_driver_race_data(row)
+    #
+    #         # add the data to the graph by checking if the driver and race exist in our graph
+    #         if f1_graph.has_driver(driver_id) and f1_graph.has_race(race_id):
+    #             f1_graph.add_driver_to_race(race_id, driver_id, driver_race_data)
+
     with open(results_csv, "r", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
+        reader = csv.reader(f)
+        header = next(reader)
+
+        race_id_index = header.index("raceId")
+        driver_id_index = header.index("driverId")
+
         for row in reader:
-            race_id = int(row["raceId"])
-            driver_id = int(row["driverId"])
+            race_id = int(row[race_id_index])
+            driver_id = int(row[driver_id_index])
 
-            driver_race_data = _get_driver_race_data(row)
+            row_dict = dict(zip(header, row))
+            driver_race_data = _get_driver_race_data(row_dict)
 
-            # add the data to the graph by checking if the driver and race exist in our graph
             if f1_graph.has_driver(driver_id) and f1_graph.has_race(race_id):
                 f1_graph.add_driver_to_race(race_id, driver_id, driver_race_data)
 
@@ -67,7 +111,7 @@ def _get_driver_race_data(row: dict) -> list:
         finish_race = False
 
     # determine the fastest lap rank
-    if row["fastestLapOrder"] != "\\N" and row["position"] != " ":
+    if row["fastestLapOrder"] != "\\N" and row["fastestLapOrder"] != " ":
         fastest_lap = int(row["fastestLapOrder"])
     else:
         fastest_lap = 99
