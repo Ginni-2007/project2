@@ -112,7 +112,7 @@ def _get_driver_race_data(row: dict) -> list:
 
     # determine the fastest lap rank
     fastest_lap = int(row["fastestLapOrder"])
-
+ #lllll
     # determine if they won
     if final_position == 1:
         won_race = True
