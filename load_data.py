@@ -101,29 +101,24 @@ def _get_driver_race_data(row: dict) -> list:
     """Helper function to process a single row from results_csv and return the data that entities.py requires
     """
     start_position = int(row["grid"])
+    final_position = int(row["positionOrderUse"])
+    won_race = False
+    finish_race = True
 
-    # determine what the driver's final position was and finish status
-    if row["position"] != "\\N" and row["position"] != " ":
-        final_position = int(row["position"])
-        finish_race = True
-    else:
-        final_position = 50
+    if row["position"] == "\\N" or row["position"] != " ":
         finish_race = False
 
-    # determine the fastest lap rank
     fastest_lap = int(row["fastestLapOrder"])
- #lllll
-    # determine if they won
+
     if final_position == 1:
         won_race = True
-    else:
-        won_race = False
 
     return [start_position, final_position, fastest_lap, False, won_race, finish_race]
 
 
 if __name__ == "__main__":
     import python_ta
+
     python_ta.check_all(config={
         "extra-imports": ["csv", "entities"],
         "allowed-io": ["load_f1_data"],
