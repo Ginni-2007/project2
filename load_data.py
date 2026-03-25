@@ -111,10 +111,7 @@ def _get_driver_race_data(row: dict) -> list:
         finish_race = False
 
     # determine the fastest lap rank
-    if row["fastestLapOrder"] != "\\N" and row["fastestLapOrder"] != " ":
-        fastest_lap = int(row["fastestLapOrder"])
-    else:
-        fastest_lap = 99
+    fastest_lap = int(row["fastestLapOrder"])
 
     # determine if they won
     if final_position == 1:
