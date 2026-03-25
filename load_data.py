@@ -113,7 +113,7 @@ def _get_driver_race_data(row: dict) -> list:
     if final_position == 1:
         won_race = True
 
-    return [start_position, final_position, fastest_lap, False, won_race, finish_race]
+    return [start_position, final_position, fastest_lap, True, won_race, finish_race]
 
 
 if __name__ == "__main__":
