@@ -160,6 +160,15 @@ class Graph:
 
         return [self._drivers[driver] for driver in self._drivers]
 
+    def get_driver(self, driver_name: str) -> Driver:
+        """Return the Driver instance of the driver inputted"""
+
+        lst = {self._drivers[x].name: self._drivers[x] for x in self._drivers}
+        if driver_name not in lst:
+            raise ValueError
+
+        return lst[driver_name]
+
 
 class Race:
     """

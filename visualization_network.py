@@ -11,26 +11,54 @@ from plotly.graph_objs import Scatter, Figure
 import entities
 import load_data
 
+def create_graph(graph: entities.Graph, driver_name: str) -> nx.Graph:
 
-def create_graph(graph: entities.Graph) -> nx.DiGraph:
+    g = nx.Graph()
+    racer = graph.get_driver(driver_name)
 
-    g = nx.DiGraph()
-    racers = graph.get_list_of_drivers()
-
-    for driver in racers:
+    g.add_node(driver_name)
+    for driver in racer.neighbours:
         g.add_node(driver.name)
+        g.add_edge(driver.name, driver_name)
 
-    for driver in racers:
-        for driver_neighbour in driver.neighbours:
-            if not g.has_node(driver_neighbour.name):
-                g.add_node(driver_neighbour.name)
-
-            if not g.has_edge(driver.name, driver_neighbour.name) or not g.has_edge(driver_neighbour.name, driver.name):
-                if driver.neighbours[driver_neighbour] > driver_neighbour.neighbours[driver]:
-                    g.add_edge(driver.name, driver_neighbour.name, weight=driver.neighbours[driver_neighbour])
-                else:
-                    g.add_edge(driver.name, driver_neighbour.name, weight=driver_neighbour.neighbours[driver])
     return g
+
+
+# original idea
+# def create_graph(graph: entities.Graph) -> nx.Graph:
+#
+#     g = nx.Graph()
+#     racers = graph.get_list_of_drivers()
+#
+#     for driver in racers:
+#         g.add_node(driver.name)
+#
+#     for driver in racers:
+#         for driver_neighbour in driver.neighbours:
+#             if not g.has_node(driver_neighbour.name):
+#                 g.add_node(driver_neighbour.name)
+#
+#             g.add_edge(driver.name, driver_neighbour.name)
+#
+#     return g
+
+    # g = nx.DiGraph()
+    #     racers = graph.get_list_of_drivers()
+    #
+    #     for driver in racers:
+    #         g.add_node(driver.name)
+    #
+    #     for driver in racers:
+    #         for driver_neighbour in driver.neighbours:
+    #             if not g.has_node(driver_neighbour.name):
+    #                 g.add_node(driver_neighbour.name)
+    #
+    #             if not g.has_edge(driver.name, driver_neighbour.name) or not g.has_edge(driver_neighbour.name, driver.name):
+    #                 if driver.neighbours[driver_neighbour] > driver_neighbour.neighbours[driver]:
+    #                     g.add_edge(driver.name, driver_neighbour.name, weight=driver.neighbours[driver_neighbour])
+    #                 else:
+    #                     g.add_edge(driver.name, driver_neighbour.name, weight=driver_neighbour.neighbours[driver])
+    #     return g
 
 
 def visualize_graph(graph_nx: nx.Graph,
