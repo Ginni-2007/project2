@@ -27,9 +27,9 @@ def create_graph(graph: entities.Graph) -> nx.DiGraph:
 
             if not g.has_edge(driver.name, driver_neighbour.name) or not g.has_edge(driver_neighbour.name, driver.name):
                 if driver.neighbours[driver_neighbour] > driver_neighbour.neighbours[driver]:
-                    g.add_edge(driver.name, driver_neighbour, weight=driver.neighbours[driver_neighbour])
+                    g.add_edge(driver.name, driver_neighbour.name, weight=driver.neighbours[driver_neighbour])
                 else:
-                    g.add_edge(driver.name, driver_neighbour, weight=driver_neighbour.neighbours[driver])
+                    g.add_edge(driver.name, driver_neighbour.name, weight=driver_neighbour.neighbours[driver])
     return g
 
 
