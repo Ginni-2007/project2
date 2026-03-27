@@ -155,6 +155,12 @@ class Graph:
         """
         return race_id in self._races
 
+    def get_list_of_drivers(self) -> list[Driver]:
+        """Return a list of the drivers"""
+
+        return [self._drivers[driver] for driver in self._drivers]
+
+
 class Race:
     """
     A Race vertex in the graph, used to represent a single race
@@ -326,7 +332,7 @@ class Driver:
                              starting_position=driver_race_data[0], final_position=driver_race_data[1],
                              fastest_lap_order=driver_race_data[2], is_sprint=driver_race_data[3],
                              won_race=driver_race_data[4], finish_race=driver_race_data[5])
-        self.past_races[driver_race_data[0]] = race_data
+        self.past_races[race.get_id()] = race_data
 
 
 def update_weight(driver1: Driver, driver2: Driver) -> int:
@@ -347,7 +353,8 @@ def update_weight(driver1: Driver, driver2: Driver) -> int:
     sum_so_far1 /= len(common_race_ids)
     sum_so_far2 /= len(common_race_ids)
 
-    return abs(sum_so_far1 - sum_so_far2)
+    # return abs(sum_so_far1 - sum_so_far2)
+    return sum_so_far1 - sum_so_far2  #removed abs value for the directed graph
 
 
 def calculate_one_race(race_data: RaceData) -> int:

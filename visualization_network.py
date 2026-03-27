@@ -8,6 +8,30 @@ review a3 visual gaph and work with how to execute the visualiations
 import networkx as nx
 from plotly.graph_objs import Scatter, Figure
 
+import entities
+import load_data
+
+
+def create_graph(graph: entities.Graph) -> nx.DiGraph:
+
+    g = nx.DiGraph()
+    racers = graph.get_list_of_drivers()
+
+    for driver in racers:
+        g.add_node(driver.name)
+
+    for driver in racers:
+        for driver_neighbour in driver.neighbours:
+            if not g.has_node(driver_neighbour.name):
+                g.add_node(driver_neighbour.name)
+
+            if not g.has_edge(driver.name, driver_neighbour.name) or not g.has_edge(driver_neighbour.name, driver.name):
+                if driver.neighbours[driver_neighbour] > driver_neighbour.neighbours[driver]:
+                    g.add_edge(driver.name, driver_neighbour, weight=driver.neighbours[driver_neighbour])
+                else:
+                    g.add_edge(driver.name, driver_neighbour, weight=driver_neighbour.neighbours[driver])
+    return g
+
 
 def visualize_graph(graph: Graph,
                     layout: str = 'spring_layout') -> None:
