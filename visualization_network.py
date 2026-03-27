@@ -33,9 +33,9 @@ def create_graph(graph: entities.Graph) -> nx.DiGraph:
     return g
 
 
-def visualize_graph(graph: Graph,
+def visualize_graph(graph_nx: nx.Graph,
                     layout: str = 'spring_layout') -> None:
-    graph_nx = graph.to_networkx()
+    # graph_nx = graph.to_networkx()
 
     pos = getattr(nx, layout)(graph_nx)
 
