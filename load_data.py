@@ -1,5 +1,5 @@
 """
-TODO
+TODO the docstring...
 """
 
 import csv
@@ -86,7 +86,9 @@ def load_f1_data(drivers_csv: str, races_csv: str, results_csv: str) -> Graph:
             race_id = int(row[race_id_index])
             driver_id = int(row[driver_id_index])
 
+            # Citation: Chatgpt
             row_dict = dict(zip(header, row))
+
             driver_race_data = _get_driver_race_data(row_dict)
 
             if f1_graph.has_driver(driver_id) and f1_graph.has_race(race_id):
