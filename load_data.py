@@ -20,6 +20,7 @@ import csv
 from entities import Graph
 
 
+
 def load_f1_data(drivers_csv: str, races_csv: str, results_csv: str) -> Graph:
     """Return a Graph with the drivers, races and results loaded in from the CSV files.
     The Graph will contain all drivers and races, with edges created between the drivers who have competed in the same
