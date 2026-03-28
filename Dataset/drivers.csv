@@ -1,7 +1,7 @@
 driverId,driverRef,number,code,forename,surname,nationality
 1,hamilton,44,HAM,Lewis,Hamilton,British
 4,alonso,14,ALO,Fernando,Alonso,Spanish
-8,raikkonen,7,RAI,Kimi,Räikkönen,Finnish
+8,raikkonen,7,RAI,Kimi,Raikkonen,Finnish
 9,kubica,88,KUB,Robert,Kubica,Polish
 13,massa,19,MAS,Felipe,Massa,Brazilian
 18,button,22,BUT,Jenson,Button,British
@@ -10,7 +10,7 @@ driverId,driverRef,number,code,forename,surname,nationality
 842,gasly,10,GAS,Pierre,Gasly,French
 807,hulkenberg,27,HUL,Nico,Hülkenberg,German
 814,resta,40,DIR,Paul,di Resta,British
-815,perez,11,PER,Sergio,Pérez,Mexican
+815,perez,11,PER,Sergio,Perez,Mexican
 817,ricciardo,3,RIC,Daniel,Ricciardo,Australian
 822,bottas,77,BOT,Valtteri,Bottas,Finnish
 825,kevin_magnussen,20,MAG,Kevin,Magnussen,Danish

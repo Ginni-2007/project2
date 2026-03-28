@@ -217,6 +217,14 @@ class Graph:
 
         return lst[driver_name]
 
+    def get_driver_by_id(self, driver_id: int) -> Driver:
+        """Return the Driver instance associated with the given driver_id.
+
+        Preconditions:
+            - driver_id in self._drivers
+        """
+        return self._drivers[driver_id]
+
 
 class Race:
     """

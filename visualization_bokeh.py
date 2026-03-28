@@ -17,6 +17,7 @@ expressly prohibited. For more information on copyright for this project, please
 
 This file is Copyright (c) 2026 Huda Anum, Grishma Arun Kumar, Mehal Patel, Jolly Yan
 """
+import entities
 import load_data
 
 from bokeh.models import ColumnDataSource, FactorRange
@@ -26,16 +27,10 @@ from bokeh.transform import factor_cmap
 from bokeh.models import HoverTool
 
 
-def bar_chart(d1_id: str, d2_id: str):
-    f1_graph = load_data.load_f1_data(
-        "Dataset/drivers.csv",
-        "Dataset/races.csv",
-        "Dataset/results.csv"
-    )
-    id1, id2 = int(d1_id), int(d2_id)
+def bar_chart(f1_graph: entities.Graph, d1_id: int, d2_id: int):
 
-    d1 = f1_graph._drivers.get(id1)
-    d2 = f1_graph._drivers.get(id2)
+    d1 = f1_graph._drivers.get(d1_id)
+    d2 = f1_graph._drivers.get(d2_id)
 
     if not d1 or not d2:
         print(f"Error: One or both driver IDs ({d1_id}, {d2_id}) not found.")

@@ -6,6 +6,7 @@ import visualization_network
 import visualization_bokeh
 import entities
 
+
 def load_welcome_message() -> None:
     """The intial message that will be presented when the file is run"""
 
@@ -61,8 +62,8 @@ if __name__ == "__main__":
             print("That was an invalid action; try again.")
             choice = input("\nEnter action: ").lower().strip()
 
-
         if choice == '(c)':
+            print("Thank you for using our project")
             ongoing = False
 
         elif choice == '(a)':
@@ -71,6 +72,22 @@ if __name__ == "__main__":
 
         else:
             driver1_ID, driver2_ID = choose_drivers(graph)
-            # TODO: add the visualize bokeh componenet in here
+            d1 = graph.get_driver_by_id(driver1_ID)
+            d2 = graph.get_driver_by_id(driver2_ID)
+
+            stats = graph.compute_head_to_head(d1, d2)
+            common_races = graph.get_shared_races(d1, d2)
+
+            # printing stats in the console in order to compare with visualization
+            print("\n" + "="*60)
+            print(f"\nHEAD-TO-HEAD STATS: {len(common_races)} shared races")
+            print("-" * 50)
+            print(f"{'Metric':<20} | {d1.name:<15} | {d2.name:<15}")
+            print("-" * 60)
+            for metric, (p1, p2) in stats.items():
+                print(f"{metric:<20} | {p1:>14.1f}% | {p2:>14.1f}%")
+
+            print("=" * 60)
+            visualization_bokeh.bar_chart(graph, driver1_ID, driver2_ID)
 
 
