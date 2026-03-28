@@ -106,60 +106,87 @@ class Graph:
             - driver1 in driver2.neighbours and driver2 in driver1.neighbours
             - driver1 in driver2.racer_to_races and driver2 in driver1.racer_to_races
         """
+        d1_data = {'finishes_ahead': 0, 'wins': 0, 'avg_change_in_pos': 0, 'fastest_lap': 0, 'podium': 0}
+        d2_data = {'finishes_ahead': 0, 'wins': 0, 'avg_change_in_pos': 0, 'fastest_lap': 0, 'podium': 0}
+
         common_races = self.get_shared_races(d1, d2)
         if common_races == 0:
             raise ValueError
-
-        d1_finsihes_ahead = 0
-        d2_finsihes_ahead = 0
-
-        d1_wins = 0
-        d2_wins = 0
-
-        d1_avg_change_in_pos = 0
-        d2_avg_change_in_pos = 0
-
-        d1_fastest_lap = 0
-        d2_fastest_lap = 0
-
-        d1_podium = 0
-        d2_podium = 0
 
         for race_id in common_races:
             d1_value = d1.past_races[race_id]
             d2_value = d2.past_races[race_id]
 
             if d1_value.final_position < d2_value.final_position:
-                d1_finsihes_ahead += 1
+                d1_data['finishes_ahead'] += 1
             else:
-                d2_finsihes_ahead += 1
+                d2_data['finishes_ahead'] += 1
 
             if d2_value.final_position == 1:
-                d2_wins += 1
+                d1_data['wins'] += 1
             if d1_value.final_position == 1:
-                d1_wins += 1
+                d2_data['wins'] += 1
 
             if d1_value.final_position in {1, 2, 3}:
-                d1_podium += 1
+                d1_data['podium'] += 1
             if d2_value.final_position in {1, 2, 3}:
-                d2_podium += 1
+                d2_data['podium'] += 1
 
             if d1_value.fastest_lap_order < d2_value.fastest_lap_order:
-                d1_fastest_lap += 1
+                d1_data['fastest_lap'] += 1
             else:
-                d2_fastest_lap += 1
+                d2_data['fastest_lap'] += 1
 
-            d1_avg_change_in_pos += d1_value.position_change
-            d2_avg_change_in_pos += d2_value.position_change
+            d1_data['avg_change_in_pos'] += d1_value.position_change
+            d2_data['avg_change_in_pos'] += d2_value.position_change
 
         return {
-            '# of wins': ((d1_wins/len(common_races)) * 100, (d2_wins/len(common_races)) * 100),
-            '# podium finishes': ((d1_podium/len(common_races)) * 100, (d2_podium/len(common_races)) * 100),
-            '# of times each driver \n finished ahead of each other': (d1_finsihes_ahead, d2_finsihes_ahead),
-            'avg change in position': ((d1_avg_change_in_pos / len(common_races)) * 100,
-                                       (d2_avg_change_in_pos / len(common_races) * 100)),
-            'fastest lap count': ((d1_fastest_lap/len(common_races)) * 100, (d2_fastest_lap/len(common_races)) * 100)
+            '# of wins': ((d1_data['wins'] / len(common_races)) * 100, (d2_data['wins'] / len(common_races)) * 100),
+            '# podium finishes': ((d1_data['podium'] / len(common_races)) * 100,
+                                  (d2_data['podium'] / len(common_races)) * 100),
+            '# of times each driver \n finished ahead of each other': (d1_data['finishes_ahead'],
+                                                                       d2_data['finishes_ahead']),
+            'avg change in position': ((d1_data['avg_change_in_pos'] / len(common_races)) * 100,
+                                       (d2_data['avg_change_in_pos'] / len(common_races) * 100)),
+            'fastest lap count': ((d1_data['fastest_lap'] / len(common_races)) * 100,
+                                  (d2_data['fastest_lap'] / len(common_races)) * 100)
         }
+
+        # for race_id in common_races:
+        #     d1_value = d1.past_races[race_id]
+        #     d2_value = d2.past_races[race_id]
+        #
+        #     if d1_value.final_position < d2_value.final_position:
+        #         d1_finsihes_ahead += 1
+        #     else:
+        #         d2_finsihes_ahead += 1
+        #
+        #     if d2_value.final_position == 1:
+        #         d2_wins += 1
+        #     if d1_value.final_position == 1:
+        #         d1_wins += 1
+        #
+        #     if d1_value.final_position in {1, 2, 3}:
+        #         d1_podium += 1
+        #     if d2_value.final_position in {1, 2, 3}:
+        #         d2_podium += 1
+        #
+        #     if d1_value.fastest_lap_order < d2_value.fastest_lap_order:
+        #         d1_fastest_lap += 1
+        #     else:
+        #         d2_fastest_lap += 1
+        #
+        #     d1_avg_change_in_pos += d1_value.position_change
+        #     d2_avg_change_in_pos += d2_value.position_change
+        #
+        # return {
+        #     '# of wins': ((d1_wins/len(common_races)) * 100, (d2_wins/len(common_races)) * 100),
+        #     '# podium finishes': ((d1_podium/len(common_races)) * 100, (d2_podium/len(common_races)) * 100),
+        #     '# of times each driver \n finished ahead of each other': (d1_finsihes_ahead, d2_finsihes_ahead),
+        #     'avg change in position': ((d1_avg_change_in_pos / len(common_races)) * 100,
+        #                                (d2_avg_change_in_pos / len(common_races) * 100)),
+        #     'fastest lap count': ((d1_fastest_lap/len(common_races)) * 100, (d2_fastest_lap/len(common_races)) * 100)
+        # }
 
     def has_driver(self, driver_id: int) -> bool:
         """Return whether driver_id is in this graph.

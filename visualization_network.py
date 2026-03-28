@@ -25,7 +25,7 @@ import entities
 import load_data
 
 def create_single_driver_graph(graph: entities.Graph, driver_name: str) -> nx.DiGraph:
-
+    """Creates a single networkX graph"""
     g = nx.DiGraph()
     racer = graph.get_driver(driver_name)
 
