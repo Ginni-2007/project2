@@ -1,4 +1,4 @@
-import entities
+
 import load_data
 
 from bokeh.models import ColumnDataSource, FactorRange
@@ -69,4 +69,3 @@ def bar_chart(d1_id: str, d2_id: str):
 if __name__ == "__main__":
     # Example: 1 is Hamilton, 4 is Alonso
     bar_chart('1', '4')
-
