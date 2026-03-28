@@ -98,7 +98,7 @@ class Graph:
             """
         return d1.get_races_against(d2)
 
-    def compute_head_to_head(self, d1: Driver, d2: Driver) -> dict[str, tuple[int, int]]:
+    def compute_head_to_head(self, d1: Driver, d2: Driver) -> dict[str, tuple[int | float, int | float]]:
         """
         Compute the head-to-head strength between two drivers.
         Returns a dictionary with keys of different categories and values as tuples for driver d1, and d2
@@ -373,8 +373,8 @@ def update_weight(driver1: Driver, driver2: Driver) -> int:
         - driver1 in driver2.neighbours and driver2 in driver1.neighbours
         - driver1 in driver2.racer_to_races and driver2 in driver1.racer_to_races
     """
-    sum_so_far1 = 0
-    sum_so_far2 = 0
+    sum_so_far1 = 0.0
+    sum_so_far2 = 0.0
     common_race_ids = driver1.get_races_against(driver2)
 
     for race_id in common_race_ids:
@@ -384,12 +384,12 @@ def update_weight(driver1: Driver, driver2: Driver) -> int:
     sum_so_far1 /= len(common_race_ids)
     sum_so_far2 /= len(common_race_ids)
 
-    return sum_so_far1 - sum_so_far2
+    return int(sum_so_far1 - sum_so_far2)
 
 
 def calculate_one_race(race_data: RaceData) -> int:
     """Compute the points for a driver in a particular race, using personalized points system. """
-    points = 0
+    points = 0.0
     if not race_data.finish_race:
         return 0
     base_score = (race_data.race.num_drivers() - race_data.final_position) * 6
