@@ -1,8 +1,21 @@
 """
-only the drivers
+CSC111 Project 2:- Beyond the Podium: A battle between F1’s greatest
+========================================================
 
+This module provides functionality to visualize the network of driver
+relationships using NetworkX and Plotly. It creates interactive graph
+visualizations showing connections between drivers based on their shared race
+history, enabling exploration of competition networks and driver clusters.
 
-review a3 visual gaph and work with how to execute the visualiations
+Copyright and Usage Information
+===============================
+
+This file is provided solely for the personal and private use of students
+taking CSC111 at the University of Toronto St. George campus. All forms of
+distribution of this code, whether as given or with any changes, are
+expressly prohibited. For more information on copyright for this project, please reach out to the group.
+
+This file is Copyright (c) 2026 Huda Anum, Grishma Arun Kumar, Mehal Patel, Jolly Yan
 """
 
 import networkx as nx

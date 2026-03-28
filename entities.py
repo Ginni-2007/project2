@@ -1,8 +1,24 @@
 """
-TODO
+CSC111 Project 2:- Beyond the Podium: A battle between F1’s greatest
+========================================================
+
+This module defines the core data structures for representing and analyzing
+head-to-head competition between Formula 1 drivers. It includes Graph, Driver,
+Race, and RaceData classes that model the relationships between drivers based
+on shared race participation, enabling computation of comparative performance
+metrics.
+
+Copyright and Usage Information
+===============================
+
+This file is provided solely for the personal and private use of students
+taking CSC111 at the University of Toronto St. George campus. All forms of
+distribution of this code, whether as given or with any changes, are
+expressly prohibited. For more information on copyright for this project, please reach out to the group.
+
+This file is Copyright (c) 2026 Huda Anum, Grishma Arun Kumar, Mehal Patel, Jolly Yan
 """
 from __future__ import annotations
-from typing import Any
 
 
 class Graph:
@@ -64,7 +80,7 @@ class Graph:
 
         self._races[race_id].add_driver(driver_id, self._drivers[driver_id], driver_race_data)
 
-    def add_edge(self):
+    def add_edge(self) -> None:
         """
         Create edges between drivers who have competed in the same race.
         For each race, connect every pair of drivers as opponents and record the race ID in their shared history.
@@ -183,7 +199,7 @@ class Race:
         - _race_id: The int id for the race
         - _name: The name of the race
         - _drivers: Dictionary mapping the driver ids to the Driver instances
-        - _circuitID: The id of the circuit
+        - _circuit_id: The id of the circuit
 
     Representation Invariants:
         -
@@ -191,7 +207,7 @@ class Race:
     _race_id: int
     _name: str
     _drivers: dict[int, Driver]
-    _circuitID: int
+    _circuit_id: int
 
     def __init__(self, race_id: int, name: str, circuit_id: int) -> None:
         """
@@ -202,7 +218,7 @@ class Race:
         """
         self._race_id = race_id
         self._name = name
-        self._circuitID = circuit_id
+        self._circuit_id = circuit_id
 
         self._drivers = {}
 
@@ -273,6 +289,7 @@ class RaceData:
     is_sprint: bool
     won_race: bool
     finish_race: bool
+    position_change: int
 
     def __init__(self, race: Race, driver_id: int, starting_position: int, final_position: int,
                  fastest_lap_order: int, is_sprint: bool, won_race: bool, finish_race: bool) -> None:
@@ -320,7 +337,7 @@ class Driver:
         self.racer_to_races = {}
         self.past_races = {}
 
-    def add_opponent(self, other_driver: Driver, race_id: int):
+    def add_opponent(self, other_driver: Driver, race_id: int) -> None:
         """
         Record that this driver competed against another driver in a race.
         If the opponent is new, add them to neighbours and initialize tracking.
@@ -367,8 +384,7 @@ def update_weight(driver1: Driver, driver2: Driver) -> int:
     sum_so_far1 /= len(common_race_ids)
     sum_so_far2 /= len(common_race_ids)
 
-    # return abs(sum_so_far1 - sum_so_far2)
-    return sum_so_far1 - sum_so_far2  #removed abs value for the directed graph
+    return sum_so_far1 - sum_so_far2
 
 
 def calculate_one_race(race_data: RaceData) -> int:
@@ -394,3 +410,12 @@ def calculate_one_race(race_data: RaceData) -> int:
         points *= 0.5
 
     return int(points)
+
+
+if __name__ == "__main__":
+    import python_ta
+
+    python_ta.check_all(config={
+        "extra-imports": ["csv"],
+        "max-line-length": 120
+    })
