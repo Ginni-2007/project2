@@ -139,7 +139,7 @@ class Graph:
         return {
             '# of wins': (d1_wins, d2_wins),
             '# podium finishes': (d1_podium, d2_podium),
-            '# of times each driver finished ahead of each other': (d1_finsihes_ahead, d2_finsihes_ahead),
+            '# of times each driver \n finished ahead of each other': (d1_finsihes_ahead, d2_finsihes_ahead),
             'avg change in position': (d1_avg_change_in_pos / len(common_races),
                                        d2_avg_change_in_pos / len(common_races)),
             'fastest lap count': (d1_fastest_lap, d2_fastest_lap)
