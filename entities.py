@@ -137,14 +137,12 @@ class Graph:
             d2_avg_change_in_pos += d2_value.position_change
 
         return {
-            '# of wins': ((d1_wins / len(common_races)) * 100, (d2_wins / len(common_races)) * 100),
-            '# podium finishes': ((d1_podium / len(common_races) * 100), (d2_podium / len(common_races) * 100)),
-            '# of times each driver finished ahead of each other': ((d1_finsihes_ahead / len(common_races) * 100),
-                                                                    (d2_finsihes_ahead / len(common_races) * 100)),
+            '# of wins': (d1_wins, d2_wins),
+            '# podium finishes': (d1_podium, d2_podium),
+            '# of times each driver \n finished ahead of each other': (d1_finsihes_ahead, d2_finsihes_ahead),
             'avg change in position': (d1_avg_change_in_pos / len(common_races),
                                        d2_avg_change_in_pos / len(common_races)),
-            'fastest lap count': ((d1_fastest_lap / len(common_races) * 100),
-                                  (d2_fastest_lap / len(common_races) * 100))
+            'fastest lap count': (d1_fastest_lap, d2_fastest_lap)
         }
 
     def has_driver(self, driver_id: int) -> bool:
