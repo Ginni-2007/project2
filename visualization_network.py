@@ -11,36 +11,48 @@ from plotly.graph_objs import Scatter, Figure
 import entities
 import load_data
 
-def create_graph(graph: entities.Graph, driver_name: str) -> nx.Graph:
+def create_single_driver_graph(graph: entities.Graph, driver_name: str) -> nx.DiGraph:
 
-    g = nx.Graph()
+    g = nx.DiGraph()
     racer = graph.get_driver(driver_name)
 
-    g.add_node(driver_name)
+    g.add_node(racer.name)
     for driver in racer.neighbours:
         g.add_node(driver.name)
-        g.add_edge(driver.name, driver_name)
+        g.add_edge(driver.name, racer.name, weight=racer.neighbours[driver])
 
     return g
 
-
-# original idea
-# def create_graph(graph: entities.Graph) -> nx.Graph:
+# def create_single_driver_graph(graph: entities.Graph, driver_name: str) -> nx.Graph:
 #
 #     g = nx.Graph()
-#     racers = graph.get_list_of_drivers()
+#     racer = graph.get_driver(driver_name)
 #
-#     for driver in racers:
+#     g.add_node(driver_name)
+#     for driver in racer.neighbours:
 #         g.add_node(driver.name)
-#
-#     for driver in racers:
-#         for driver_neighbour in driver.neighbours:
-#             if not g.has_node(driver_neighbour.name):
-#                 g.add_node(driver_neighbour.name)
-#
-#             g.add_edge(driver.name, driver_neighbour.name)
+#         g.add_edge(driver.name, driver_name)
 #
 #     return g
+
+
+# original idea
+def create_entire_graph(graph: entities.Graph) -> nx.Graph:
+
+    g = nx.Graph()
+    racers = graph.get_list_of_drivers()
+
+    for driver in racers:
+        g.add_node(driver.name)
+
+    for driver in racers:
+        for driver_neighbour in driver.neighbours:
+            if not g.has_node(driver_neighbour.name):
+                g.add_node(driver_neighbour.name)
+
+            g.add_edge(driver.name, driver_neighbour.name)
+
+    return g
 
     # g = nx.DiGraph()
     #     racers = graph.get_list_of_drivers()
@@ -61,9 +73,7 @@ def create_graph(graph: entities.Graph, driver_name: str) -> nx.Graph:
     #     return g
 
 
-def visualize_graph(graph_nx: nx.Graph,
-                    layout: str = 'spring_layout') -> None:
-    # graph_nx = graph.to_networkx()
+def visualize_graph(graph_nx: nx.Graph | nx.DiGraph, layout: str = 'spring_layout') -> None:
 
     pos = getattr(nx, layout)(graph_nx)
 
@@ -109,8 +119,3 @@ def visualize_graph(graph_nx: nx.Graph,
     fig.update_layout({'showlegend': False})
     fig.show()
 
-
-
-
-# TODO visualize graph clusters... (which groups do we want it to be)
-# TODO GRAPH CLASS METHOD to_networkx()
