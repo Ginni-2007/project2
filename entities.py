@@ -156,14 +156,19 @@ class Graph:
         return race_id in self._races
 
     def get_list_of_drivers(self) -> list[Driver]:
-        """Return a list of the drivers"""
+        """Return a list of the drivers. Note, a list of Driver instances will be returned"""
 
         return [self._drivers[driver] for driver in self._drivers]
+
+    def get_list_of_driver_names(self) -> list[str]:
+        """Return a list of the driver names"""
+
+        return [self._drivers[driver].name.lower().strip() for driver in self._drivers]
 
     def get_driver(self, driver_name: str) -> Driver:
         """Return the Driver instance of the driver inputted"""
 
-        lst = {self._drivers[x].name: self._drivers[x] for x in self._drivers}
+        lst = {self._drivers[x].name.lower().strip(): self._drivers[x] for x in self._drivers}
         if driver_name not in lst:
             raise ValueError
 
