@@ -61,6 +61,7 @@ if __name__ == "__main__":
             print("That was an invalid action; try again.")
             choice = input("\nEnter action: ").lower().strip()
 
+
         if choice == '(c)':
             ongoing = False
 
