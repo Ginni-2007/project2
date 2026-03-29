@@ -211,7 +211,7 @@ class Graph:
         Preconditions:
             - driver_id in self._drivers
         """
-        return self._drivers[driver_id]
+        return self._drivers.get(driver_id)
 
 
 class Race:

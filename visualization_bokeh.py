@@ -29,8 +29,8 @@ from bokeh.models import HoverTool
 
 
 def bar_chart(f1_graph: entities.Graph, d1_id: int, d2_id: int):
-    d1 = f1_graph._drivers.get(d1_id)
-    d2 = f1_graph._drivers.get(d2_id)
+    d1 = f1_graph.get_driver_by_id(d1_id)
+    d2 = f1_graph.get_driver_by_id(d2_id)
 
     if not d1 or not d2:
         print(f"Error: One or both driver IDs ({d1_id}, {d2_id}) not found.")
@@ -79,6 +79,3 @@ def bar_chart(f1_graph: entities.Graph, d1_id: int, d2_id: int):
     show(p)
 
 
-if __name__ == "__main__":
-    # Example: 1 is Hamilton, 4 is Alonso
-    bar_chart('1', '4')
