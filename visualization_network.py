@@ -32,7 +32,7 @@ def create_single_driver_graph(graph: entities.Graph, driver_name: str) -> nx.Di
     g.add_node(racer.name, codename=racer.codename)
     for driver in racer.neighbours:
         g.add_node(driver.name, codename=driver.codename)
-        g.add_edge(driver.name, racer.name, weight=racer.neighbours[driver])
+        g.add_edge(driver.name, racer.name)  # weight=racer.neighbours[driver]
 
     return g
 
@@ -48,7 +48,7 @@ def create_entire_graph(graph: entities.Graph) -> nx.Graph:
     for driver in racers:
         for driver_neighbour in driver.neighbours:
             if not g.has_node(driver_neighbour.name):
-                g.add_node(driver_neighbour.name, codename=driver_neighbour.codename, )
+                g.add_node(driver_neighbour.name, codename=driver_neighbour.codename)
 
             g.add_edge(driver.name, driver_neighbour.name)
 
@@ -56,7 +56,7 @@ def create_entire_graph(graph: entities.Graph) -> nx.Graph:
 
 
 def visualize_graph(graph_nx: nx.Graph | nx.DiGraph, layout: str = 'spring_layout') -> None:
-    pos = nx.spring_layout(graph_nx, k=0.3, iterations=100)
+    pos = getattr(nx, layout)(graph_nx)
 
     x_values = [pos[k][0] for k in graph_nx.nodes]
     y_values = [pos[k][1] for k in graph_nx.nodes]
@@ -78,7 +78,7 @@ def visualize_graph(graph_nx: nx.Graph | nx.DiGraph, layout: str = 'spring_layou
                      mode='lines',
                      # I set color to light gray for the edges but we
                      # can change it later
-                     line=dict(color='rgb(210,210,210)', width=2),
+                     line=dict(color='rgb(210,210,210)', width=1),
                      # to remove the extra information abt coordinates
                      # popping up on the graph
                      hoverinfo='none'

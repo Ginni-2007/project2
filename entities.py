@@ -342,7 +342,7 @@ class Driver:
     driver_id: int
     name: str
     codename: str
-    neighbours: dict[Driver, int]
+    neighbours: dict[Driver, float]
     racer_to_races: dict[Driver, set[int]]
     past_races: dict[int, list[RaceData]]
 
@@ -422,7 +422,7 @@ def update_weight(driver1: Driver, driver2: Driver) -> float:
     avg2 = sum_so_far2 / total_sessions
 
     # The weight represents the performance gap (Driver 1 - Driver 2)
-    return (avg1 - avg2)
+    return avg1 - avg2
 
 
 def calculate_one_race(race_data: RaceData) -> int:
