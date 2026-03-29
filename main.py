@@ -41,21 +41,37 @@ def load_welcome_message() -> None:
 
 def choose_drivers(original_graph: entities.Graph) -> tuple[int, int]:
     """Visualize the networkx for a single chosen driver 1, and allow for choosing driver 2"""
-    available_names = original_graph.get_list_of_driver_names()
+    available_codes = original_graph.get_dict_of_driver_names()
+    available_names = available_codes.values()
 
     driver1 = input("\nEnter name of the first driver you would like to compare: ").lower().strip()
-    while driver1 not in available_names:
+    while driver1 not in available_names and driver1 not in available_codes and driver1 != 'exit':
         print("That was an invalid name; try again.")
         driver1 = input("\nEnter name: ").lower().strip()
+
+    if driver1 == 'exit':
+        return -1, -1
+
+    if driver1 in available_codes:
+        driver1, driver1_code = available_codes[driver1], driver1
+    else:
+        driver1_code = original_graph.get_driver(driver1).driver_id
 
     single_driver_networkx_graph = visualization_network.create_single_driver_graph(original_graph, driver1)
     visualization_network.visualize_graph(single_driver_networkx_graph)
 
     driver2 = input("\nEnter name of the second driver you would like to compare "
                     "(NOTE: Cannot be the same as driver 1): ").lower().strip()
-    while driver2 not in available_names or driver2 == driver1:
+
+    while ((driver2 not in available_names and driver2 not in available_codes) or
+           (driver2 == driver1 or driver2 == driver1_code)):
+        if driver2 == 'exit':
+            return -1, -1
         print("That was an invalid name; try again.")
         driver2 = input("\nEnter name: ").lower().strip()
+
+    if driver2 in available_codes:
+        driver2 = available_codes[driver2]
 
     driver1_id = original_graph.get_driver(driver1).driver_id
     driver2_id = original_graph.get_driver(driver2).driver_id
@@ -69,20 +85,20 @@ if __name__ == "__main__":
 
     load_welcome_message()
     ongoing = True
-    available_options = ['(a)', '(b)', '(c)']
+    available_options = ['(a)', '(b)', 'exit']
 
     while ongoing:
         print("You can choose from the following commands:")
         print("- Show all drivers (A)")
         print("- Enter driver 1 to compare (B)")
-        print("- Exit (C)")
+        print("- Exit")
 
         choice = input("\nEnter action: ").lower().strip()
         while choice not in available_options:
             print("That was an invalid action; try again.")
             choice = input("\nEnter action: ").lower().strip()
 
-        if choice == '(c)':
+        if choice == 'exit':
             print("Thank you for using our project")
             ongoing = False
 
@@ -92,20 +108,24 @@ if __name__ == "__main__":
 
         else:
             driver1_ID, driver2_ID = choose_drivers(graph)
-            d1 = graph.get_driver_by_id(driver1_ID)
-            d2 = graph.get_driver_by_id(driver2_ID)
+            if driver1_ID == -1 and driver2_ID == -1:
+                print("Thank you for using our project")
+                ongoing = False
+            else:
+                d1 = graph.get_driver_by_id(driver1_ID)
+                d2 = graph.get_driver_by_id(driver2_ID)
 
-            stats = graph.compute_head_to_head(d1, d2)
-            common_races = graph.get_shared_races(d1, d2)
+                stats = graph.compute_head_to_head(d1, d2)
+                common_races = graph.get_shared_races(d1, d2)
 
-            # printing stats in the console in order to compare with visualization
-            print("\n" + "=" * 60)
-            print(f"\nHEAD-TO-HEAD STATS: {len(common_races)} shared races")
-            print("-" * 50)
-            print(f"{'Metric':<20} | {d1.name:<15} | {d2.name:<15}")
-            print("-" * 60)
-            for metric, (p1, p2) in stats.items():
-                print(f"{metric:<20} | {p1:>14.1f}% | {p2:>14.1f}%")
+                # printing stats in the console in order to compare with visualization
+                print("\n" + "=" * 60)
+                print(f"\nHEAD-TO-HEAD STATS: {len(common_races)} shared races")
+                print("-" * 50)
+                print(f"{'Metric':<20} | {d1.name:<15} | {d2.name:<15}")
+                print("-" * 60)
+                for metric, (p1, p2) in stats.items():
+                    print(f"{metric:<20} | {p1:>14.1f}% | {p2:>14.1f}%")
 
-            print("=" * 60)
-            visualization_bokeh.bar_chart(graph, driver1_ID, driver2_ID)
+                print("=" * 60)
+                visualization_bokeh.bar_chart(graph, driver1_ID, driver2_ID)

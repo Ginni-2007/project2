@@ -186,10 +186,15 @@ class Graph:
 
         return [self._drivers[driver] for driver in self._drivers]
 
-    def get_list_of_driver_names(self) -> list[str]:
-        """Return a list of the driver names"""
+    def get_dict_of_driver_names(self) -> dict[str, str]:
+        """Return a dictionary mapping the driver code to the name"""
 
-        return [self._drivers[driver].name.lower().strip() for driver in self._drivers]
+        return {self._drivers[driver].codename.lower().strip(): self._drivers[driver].name.lower().strip()
+                for driver in self._drivers}
+
+    # def get_driver_code_names(self) -> list[str]:
+    #     """Return a list of the driver code names"""
+    #     return [self._drivers[driver].codename.lower().strip() for driver in self._drivers]
 
     def get_driver(self, driver_name: str) -> Driver:
         """Return the Driver instance of the driver inputted"""

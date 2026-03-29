@@ -25,7 +25,7 @@ import entities
 
 
 def create_single_driver_graph(graph: entities.Graph, driver_name: str) -> nx.DiGraph:
-    """Creates a single networkX graph"""
+    """Creates a NetworkX graph for a single driver"""
     g = nx.DiGraph()
     racer = graph.get_driver(driver_name)
 
@@ -39,6 +39,7 @@ def create_single_driver_graph(graph: entities.Graph, driver_name: str) -> nx.Di
 
 # original idea
 def create_entire_graph(graph: entities.Graph) -> nx.Graph:
+    """Creates a NetworkX graph visualizing the entire graph containing all the drivers"""
     g = nx.Graph()
     racers = graph.get_list_of_drivers()
 
@@ -56,6 +57,7 @@ def create_entire_graph(graph: entities.Graph) -> nx.Graph:
 
 
 def visualize_graph(graph_nx: nx.Graph | nx.DiGraph, layout: str = 'spring_layout') -> None:
+    """Produces the visualization of the NetworkX graph"""
     pos = getattr(nx, layout)(graph_nx)
 
     x_values = [pos[k][0] for k in graph_nx.nodes]
