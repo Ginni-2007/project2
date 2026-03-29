@@ -98,9 +98,9 @@ def _load_results(f1_graph: Graph, filename: str) -> None:
 
             # Citation: Chatgpt
             row_dict = dict(zip(header, row))
-            if filename == 'results.csv':
+            if filename == 'Dataset/results.csv':
                 driver_race_data = _get_driver_race_data(row_dict)
-            else:
+            if filename == 'Dataset/sprint_results.csv':
                 driver_race_data = _get_driver_sprint_race_data(row_dict)
 
             if f1_graph.has_driver(driver_id) and f1_graph.has_race(race_id):
@@ -140,19 +140,19 @@ def _get_driver_sprint_race_data(row: dict) -> list:
     """Helper function to process a single row from results_csv and return the data that entities.py requires.
     The returned list contains: [start_position, final_position, fastest_lap, is_sprint, won_race, finish_race]
     >>> # doctest 1: driver who finished the race and won
-    >>> row1 = {"grid": "1", "positionOrderUse": "1", "position": "1", "fastestLapOrder": "1"}
+    >>> row1 = {"grid": "1", "positionOrderUse": "1", "position": "1", "lapPoints": "1"}
     >>> _get_driver_sprint_race_data(row1)
-    [1, 1, 1, True, True, True]
+    [1, 1, 0, True, True, True]
 
     >>> # doctest 2: driver who did not finish the race
-    >>> row2 = {"grid": "10", "positionOrderUse": "18", "position": "\\\\N", "fastestLapOrder": "15"}
+    >>> row2 = {"grid": "10", "positionOrderUse": "18", "position": "\\\\N", "lapPoints": "0"}
     >>> _get_driver_sprint_race_data(row2)
-    [10, 18, 15, True, False, False]
+    [10, 18, 0, True, False, False]
 
     """
     start_position = int(row["grid"])
     final_position = int(row["positionOrderUse"])
-    fastest_lap = 0
+    fastest_lap = int(row["lapPoints"])
     won_race = False
     finish_race = True
 

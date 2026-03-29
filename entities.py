@@ -165,8 +165,8 @@ class Graph:
                                   (d2_data['podium'] / total_sessions) * 100),
             '# of times each driver \n finished ahead of each other': (d1_data['finishes_ahead'],
                                                                        d2_data['finishes_ahead']),
-            'avg change in position': (d1_data['avg_change_in_pos'] / total_sessions,
-                                       d2_data['avg_change_in_pos'] / total_sessions),
+            'avg change in position': ((d1_data['avg_change_in_pos'] / total_sessions) * 100,
+                                       (d2_data['avg_change_in_pos'] / total_sessions) * 100),
             'fastest lap count': ((d1_data['fastest_lap'] / total_sessions) * 100,
                                   (d2_data['fastest_lap'] / total_sessions) * 100)
         }
@@ -315,7 +315,7 @@ class RaceData:
     position_change: int
 
     def __init__(self, race: Race, driver_id: int, starting_position: int, final_position: int,
-                 fastest_lap_order: int, is_sprint: bool, won_race: bool, finish_race: bool) -> None:
+                 fastest_lap: int, is_sprint: bool, won_race: bool, finish_race: bool) -> None:
         """
         Initializes an instance of a RaceData for a single driver, storing various data values from the race results
         """
@@ -323,7 +323,7 @@ class RaceData:
         self.driver_id = driver_id
         self.starting_position = starting_position
         self.final_position = final_position
-        self.fastest_lap_order = fastest_lap_order
+        self.fastest_lap_order = fastest_lap
         self.is_sprint = is_sprint
         self.won_race = won_race
         self.finish_race = finish_race
@@ -386,7 +386,7 @@ class Driver:
         """Add the driver's data for a given race to an instance of RaceData"""
         race_data = RaceData(race=race, driver_id=driverid,
                              starting_position=driver_race_data[0], final_position=driver_race_data[1],
-                             fastest_lap_order=driver_race_data[2], is_sprint=driver_race_data[3],
+                             fastest_lap=driver_race_data[2], is_sprint=driver_race_data[3],
                              won_race=driver_race_data[4], finish_race=driver_race_data[5])
         rid = race.get_id()
         if rid not in self.past_races:
