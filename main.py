@@ -1,5 +1,24 @@
 """
-# TODO : still need to add
+CSC111 Project 2:- Beyond the Podium: A battle between F1’s greatest
+========================================================
+
+This module serves as the main entry point for the F1 driver head-to-head
+analysis. It provides an interactive command-line interface that allows
+users to explore driver networks, compare performance metrics between drivers,
+and generate visualizations of both the driver relationship network and
+head-to-head statistics. The system integrates data loading, network analysis,
+and interactive visualizations.
+
+Copyright and Usage Information
+===============================
+
+This file is provided solely for the personal and private use of students
+taking CSC111 at the University of Toronto St. George campus. All forms of
+distribution of this code, whether as given or with any changes, are
+expressly prohibited. For more information on copyright for this project, please reach out to the group!
+
+This file is Copyright (c) 2026 Huda Anum, Grishma Arun Kumar, Mehal Patel, Jolly Yan
+
 """
 import load_data
 import visualization_network
@@ -45,7 +64,8 @@ def choose_drivers(original_graph: entities.Graph) -> tuple[int, int]:
 
 
 if __name__ == "__main__":
-    graph = load_data.load_f1_data('Dataset/drivers.csv', 'Dataset/races.csv', 'Dataset/results.csv')
+    graph = load_data.load_f1_data('Dataset/drivers.csv', 'Dataset/races.csv', 'Dataset/results.csv',
+                                   'Dataset/sprint_results.csv')
 
     load_welcome_message()
     ongoing = True
@@ -79,7 +99,7 @@ if __name__ == "__main__":
             common_races = graph.get_shared_races(d1, d2)
 
             # printing stats in the console in order to compare with visualization
-            print("\n" + "="*60)
+            print("\n" + "=" * 60)
             print(f"\nHEAD-TO-HEAD STATS: {len(common_races)} shared races")
             print("-" * 50)
             print(f"{'Metric':<20} | {d1.name:<15} | {d2.name:<15}")
@@ -89,5 +109,3 @@ if __name__ == "__main__":
 
             print("=" * 60)
             visualization_bokeh.bar_chart(graph, driver1_ID, driver2_ID)
-
-

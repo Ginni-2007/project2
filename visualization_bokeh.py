@@ -13,12 +13,13 @@ Copyright and Usage Information
 This file is provided solely for the personal and private use of students
 taking CSC111 at the University of Toronto St. George campus. All forms of
 distribution of this code, whether as given or with any changes, are
-expressly prohibited. For more information on copyright for this project, please reach out to the group.
+expressly prohibited. For more information on copyright for this project, please reach out to the group!
 
 This file is Copyright (c) 2026 Huda Anum, Grishma Arun Kumar, Mehal Patel, Jolly Yan
 """
+from numpy.ma.extras import hsplit
+
 import entities
-import load_data
 
 from bokeh.models import ColumnDataSource, FactorRange
 from bokeh.palettes import MediumContrast3
@@ -28,7 +29,6 @@ from bokeh.models import HoverTool
 
 
 def bar_chart(f1_graph: entities.Graph, d1_id: int, d2_id: int):
-
     d1 = f1_graph._drivers.get(d1_id)
     d2 = f1_graph._drivers.get(d2_id)
 

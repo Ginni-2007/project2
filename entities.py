@@ -46,7 +46,7 @@ class Graph:
         self._drivers = {}
         self._races = {}
 
-    def add_driver(self, driver_id: int, name: str) -> None:
+    def add_driver(self, driver_id: int, name: str, codename: str) -> None:
         """
         Add a new driver to the graph.
 
@@ -54,7 +54,7 @@ class Graph:
             - driver_id >= 0
         """
         if driver_id not in self._drivers:
-            self._drivers[driver_id] = Driver(driver_id, name)
+            self._drivers[driver_id] = Driver(driver_id, name, codename)
 
     def add_race(self, race_id: int, name: str, circuit_id: int) -> None:
         """
@@ -113,80 +113,63 @@ class Graph:
         if common_races == 0:
             raise ValueError
 
+        total_sessions = 0
         for race_id in common_races:
-            d1_value = d1.past_races[race_id]
-            d2_value = d2.past_races[race_id]
+            # d1.past_races[race_id] is now a list [RaceData, RaceData]
+            d1_results = d1.past_races.get(race_id, [])
+            d2_results = d2.past_races.get(race_id, [])
 
-            if d1_value.final_position < d2_value.final_position:
-                d1_data['finishes_ahead'] += 1
-            else:
-                d2_data['finishes_ahead'] += 1
+            # Compare results session-by-session (Sprint vs Sprint, GP vs GP)
+            for r1 in d1_results:
+                for r2 in d2_results:
+                    if r1.is_sprint == r2.is_sprint:
+                        total_sessions += 1
 
-            if d2_value.final_position == 1:
-                d1_data['wins'] += 1
-            if d1_value.final_position == 1:
-                d2_data['wins'] += 1
+                        # Logic: Finished Ahead
+                        if r1.final_position < r2.final_position:
+                            d1_data['finishes_ahead'] += 1
+                        elif r2.final_position < r1.final_position:
+                            d2_data['finishes_ahead'] += 1
 
-            if d1_value.final_position in {1, 2, 3}:
-                d1_data['podium'] += 1
-            if d2_value.final_position in {1, 2, 3}:
-                d2_data['podium'] += 1
+                        # Logic: Wins
+                        if r1.final_position == 1:
+                            d1_data['wins'] += 1
+                        if r2.final_position == 1:
+                            d2_data['wins'] += 1
 
-            if d1_value.fastest_lap_order < d2_value.fastest_lap_order:
-                d1_data['fastest_lap'] += 1
-            else:
-                d2_data['fastest_lap'] += 1
+                        # Logic: Podiums
+                        if r1.final_position in {1, 2, 3}:
+                            d1_data['podium'] += 1
+                        if r2.final_position in {1, 2, 3}:
+                            d2_data['podium'] += 1
 
-            d1_data['avg_change_in_pos'] += d1_value.position_change
-            d2_data['avg_change_in_pos'] += d2_value.position_change
+                        # Logic: Fastest Lap
+                        if r1.fastest_lap_order < r2.fastest_lap_order:
+                            d1_data['fastest_lap'] += 1
+                        elif r2.fastest_lap_order < r1.fastest_lap_order:
+                            d2_data['fastest_lap'] += 1
 
+                        # Logic: Change in Position
+                        d1_data['avg_change_in_pos'] += r1.position_change
+                        d2_data['avg_change_in_pos'] += r2.position_change
+
+        if total_sessions == 0:
+            return {}
+
+            # Return the exact dictionary keys and calculations you defined
+            # We use total_sessions as the denominator to account for the extra sprint races
         return {
-            '# of wins': ((d1_data['wins'] / len(common_races)) * 100, (d2_data['wins'] / len(common_races)) * 100),
-            '# podium finishes': ((d1_data['podium'] / len(common_races)) * 100,
-                                  (d2_data['podium'] / len(common_races)) * 100),
+            '# of wins': ((d1_data['wins'] / total_sessions) * 100,
+                          (d2_data['wins'] / total_sessions) * 100),
+            '# podium finishes': ((d1_data['podium'] / total_sessions) * 100,
+                                  (d2_data['podium'] / total_sessions) * 100),
             '# of times each driver \n finished ahead of each other': (d1_data['finishes_ahead'],
                                                                        d2_data['finishes_ahead']),
-            'avg change in position': ((d1_data['avg_change_in_pos'] / len(common_races)) * 100,
-                                       (d2_data['avg_change_in_pos'] / len(common_races) * 100)),
-            'fastest lap count': ((d1_data['fastest_lap'] / len(common_races)) * 100,
-                                  (d2_data['fastest_lap'] / len(common_races)) * 100)
+            'avg change in position': (d1_data['avg_change_in_pos'] / total_sessions,
+                                       d2_data['avg_change_in_pos'] / total_sessions),
+            'fastest lap count': ((d1_data['fastest_lap'] / total_sessions) * 100,
+                                  (d2_data['fastest_lap'] / total_sessions) * 100)
         }
-
-        # for race_id in common_races:
-        #     d1_value = d1.past_races[race_id]
-        #     d2_value = d2.past_races[race_id]
-        #
-        #     if d1_value.final_position < d2_value.final_position:
-        #         d1_finsihes_ahead += 1
-        #     else:
-        #         d2_finsihes_ahead += 1
-        #
-        #     if d2_value.final_position == 1:
-        #         d2_wins += 1
-        #     if d1_value.final_position == 1:
-        #         d1_wins += 1
-        #
-        #     if d1_value.final_position in {1, 2, 3}:
-        #         d1_podium += 1
-        #     if d2_value.final_position in {1, 2, 3}:
-        #         d2_podium += 1
-        #
-        #     if d1_value.fastest_lap_order < d2_value.fastest_lap_order:
-        #         d1_fastest_lap += 1
-        #     else:
-        #         d2_fastest_lap += 1
-        #
-        #     d1_avg_change_in_pos += d1_value.position_change
-        #     d2_avg_change_in_pos += d2_value.position_change
-        #
-        # return {
-        #     '# of wins': ((d1_wins/len(common_races)) * 100, (d2_wins/len(common_races)) * 100),
-        #     '# podium finishes': ((d1_podium/len(common_races)) * 100, (d2_podium/len(common_races)) * 100),
-        #     '# of times each driver \n finished ahead of each other': (d1_finsihes_ahead, d2_finsihes_ahead),
-        #     'avg change in position': ((d1_avg_change_in_pos / len(common_races)) * 100,
-        #                                (d2_avg_change_in_pos / len(common_races) * 100)),
-        #     'fastest lap count': ((d1_fastest_lap/len(common_races)) * 100, (d2_fastest_lap/len(common_races)) * 100)
-        # }
 
     def has_driver(self, driver_id: int) -> bool:
         """Return whether driver_id is in this graph.
@@ -358,11 +341,12 @@ class Driver:
     """
     driver_id: int
     name: str
+    codename: str
     neighbours: dict[Driver, int]
     racer_to_races: dict[Driver, set[int]]
-    past_races: dict[int, RaceData]
+    past_races: dict[int, list[RaceData]]
 
-    def __init__(self, driver_id: int, name: str) -> None:
+    def __init__(self, driver_id: int, name: str, codename: str) -> None:
         """
         Initialize a driver to driver_id, name, neighbour to empty set and racer_to_races to empty dictionary.
         """
@@ -371,6 +355,7 @@ class Driver:
         self.neighbours = {}
         self.racer_to_races = {}
         self.past_races = {}
+        self.codename = codename
 
     def add_opponent(self, other_driver: Driver, race_id: int) -> None:
         """
@@ -398,10 +383,13 @@ class Driver:
                              starting_position=driver_race_data[0], final_position=driver_race_data[1],
                              fastest_lap_order=driver_race_data[2], is_sprint=driver_race_data[3],
                              won_race=driver_race_data[4], finish_race=driver_race_data[5])
-        self.past_races[race.get_id()] = race_data
+        rid = race.get_id()
+        if rid not in self.past_races:
+            self.past_races[rid] = []
+        self.past_races[rid].append(race_data)
 
 
-def update_weight(driver1: Driver, driver2: Driver) -> int:
+def update_weight(driver1: Driver, driver2: Driver) -> float:
     """Updates the weight between the two drivers
 
     Preconditions:
@@ -410,16 +398,31 @@ def update_weight(driver1: Driver, driver2: Driver) -> int:
     """
     sum_so_far1 = 0.0
     sum_so_far2 = 0.0
+    total_sessions = 0
     common_race_ids = driver1.get_races_against(driver2)
 
     for race_id in common_race_ids:
-        sum_so_far1 += calculate_one_race(driver1.past_races[race_id])
-        sum_so_far2 += calculate_one_race(driver2.past_races[race_id])
+        # past_races[race_id] is now a list [RaceData, ...]
+        d1_results = driver1.past_races.get(race_id, [])
+        d2_results = driver2.past_races.get(race_id, [])
 
-    sum_so_far1 /= len(common_race_ids)
-    sum_so_far2 /= len(common_race_ids)
+        # We compare sessions of the same type (Sprint vs Sprint, GP vs GP)
+        for r1 in d1_results:
+            for r2 in d2_results:
+                if r1.is_sprint == r2.is_sprint:
+                    sum_so_far1 += calculate_one_race(r1)
+                    sum_so_far2 += calculate_one_race(r2)
+                    total_sessions += 1
 
-    return int(sum_so_far1 - sum_so_far2)
+    if total_sessions == 0:
+        return 0
+
+        # Calculate the average score per session for each driver
+    avg1 = sum_so_far1 / total_sessions
+    avg2 = sum_so_far2 / total_sessions
+
+    # The weight represents the performance gap (Driver 1 - Driver 2)
+    return (avg1 - avg2)
 
 
 def calculate_one_race(race_data: RaceData) -> int:

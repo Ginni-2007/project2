@@ -13,7 +13,7 @@ Copyright and Usage Information
 This file is provided solely for the personal and private use of students
 taking CSC111 at the University of Toronto St. George campus. All forms of
 distribution of this code, whether as given or with any changes, are
-expressly prohibited. For more information on copyright for this project, please reach out to the group.
+expressly prohibited. For more information on copyright for this project, please reach out to the group!
 
 This file is Copyright (c) 2026 Huda Anum, Grishma Arun Kumar, Mehal Patel, Jolly Yan
 """
@@ -22,79 +22,48 @@ import networkx as nx
 from plotly.graph_objs import Scatter, Figure
 
 import entities
-import load_data
+
 
 def create_single_driver_graph(graph: entities.Graph, driver_name: str) -> nx.DiGraph:
     """Creates a single networkX graph"""
     g = nx.DiGraph()
     racer = graph.get_driver(driver_name)
 
-    g.add_node(racer.name)
+    g.add_node(racer.name, codename=racer.codename)
     for driver in racer.neighbours:
-        g.add_node(driver.name)
+        g.add_node(driver.name, codename=driver.codename)
         g.add_edge(driver.name, racer.name, weight=racer.neighbours[driver])
 
     return g
 
-# def create_single_driver_graph(graph: entities.Graph, driver_name: str) -> nx.Graph:
-#
-#     g = nx.Graph()
-#     racer = graph.get_driver(driver_name)
-#
-#     g.add_node(driver_name)
-#     for driver in racer.neighbours:
-#         g.add_node(driver.name)
-#         g.add_edge(driver.name, driver_name)
-#
-#     return g
-
 
 # original idea
 def create_entire_graph(graph: entities.Graph) -> nx.Graph:
-
     g = nx.Graph()
     racers = graph.get_list_of_drivers()
 
     for driver in racers:
-        g.add_node(driver.name)
+        g.add_node(driver.name, codename=driver.codename)
 
     for driver in racers:
         for driver_neighbour in driver.neighbours:
             if not g.has_node(driver_neighbour.name):
-                g.add_node(driver_neighbour.name)
+                g.add_node(driver_neighbour.name, codename=driver_neighbour.codename, )
 
             g.add_edge(driver.name, driver_neighbour.name)
 
     return g
 
-    # g = nx.DiGraph()
-    #     racers = graph.get_list_of_drivers()
-    #
-    #     for driver in racers:
-    #         g.add_node(driver.name)
-    #
-    #     for driver in racers:
-    #         for driver_neighbour in driver.neighbours:
-    #             if not g.has_node(driver_neighbour.name):
-    #                 g.add_node(driver_neighbour.name)
-    #
-    #             if not g.has_edge(driver.name, driver_neighbour.name) or not g.has_edge(driver_neighbour.name, driver.name):
-    #                 if driver.neighbours[driver_neighbour] > driver_neighbour.neighbours[driver]:
-    #                     g.add_edge(driver.name, driver_neighbour.name, weight=driver.neighbours[driver_neighbour])
-    #                 else:
-    #                     g.add_edge(driver.name, driver_neighbour.name, weight=driver_neighbour.neighbours[driver])
-    #     return g
-
 
 def visualize_graph(graph_nx: nx.Graph | nx.DiGraph, layout: str = 'spring_layout') -> None:
-
-    pos = getattr(nx, layout)(graph_nx)
+    pos = nx.spring_layout(graph_nx, k=0.3, iterations=100)
 
     x_values = [pos[k][0] for k in graph_nx.nodes]
     y_values = [pos[k][1] for k in graph_nx.nodes]
-    labels = list(graph_nx.nodes)
+    full_name = list(graph_nx.nodes)
 
-    colours = ['rgb(255, 0, 0)' for node in graph_nx.nodes]
+    code_name = [graph_nx.nodes[n].get('codename') for n in graph_nx.nodes]
+    colours = ['rgb(0, 0, 0)' for _ in graph_nx.nodes]
 
     x_edges = []
     y_edges = []
@@ -109,7 +78,7 @@ def visualize_graph(graph_nx: nx.Graph | nx.DiGraph, layout: str = 'spring_layou
                      mode='lines',
                      # I set color to light gray for the edges but we
                      # can change it later
-                     line=dict(color='rgb(210,210,210)', width=1),
+                     line=dict(color='rgb(210,210,210)', width=2),
                      # to remove the extra information abt coordinates
                      # popping up on the graph
                      hoverinfo='none'
@@ -118,17 +87,26 @@ def visualize_graph(graph_nx: nx.Graph | nx.DiGraph, layout: str = 'spring_layou
     # tracing the nodes
     trace4 = Scatter(x=x_values,
                      y=y_values,
-                     mode='markers',
+                     mode='markers+text',
+                     name='',
                      marker=dict(symbol='circle-dot',
-                                 size=5,
+                                 size=12,
                                  color=colours),
                      # to show that when you hover over the dots the name
                      # of the drivers appears
-                     text=labels,
-                     hovertemplate='%{text}')
+                     text=code_name,
+                     textposition='top center',
+                     customdata=full_name,
+                     hovertemplate='<b>%{customdata}</b><extra></extra>')
 
     # to format all edges and nodes into one picture
     fig = Figure(data=[trace3, trace4])
-    fig.update_layout({'showlegend': False})
+    fig.update_layout(
+        showlegend=False,
+        hovermode='closest',
+        margin=dict(b=0, l=0, r=0, t=0),  # Remove margins
+        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, visible=False),
+        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, visible=False),
+        plot_bgcolor='white'  # Set background to white for a cleaner look
+    )
     fig.show()
-
