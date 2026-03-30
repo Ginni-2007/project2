@@ -60,6 +60,10 @@ def choose_drivers(original_graph: entities.Graph) -> tuple[int, int]:
     single_driver_networkx_graph = visualization_network.create_single_driver_graph(original_graph, driver1)
     visualization_network.visualize_graph(single_driver_networkx_graph)
 
+    available_codes = {driver.codename.lower().strip(): driver.name.lower().strip() for driver in
+                       original_graph.get_driver(driver1).neighbours}
+    available_names = available_codes.values()
+
     driver2 = input("\nEnter name of the second driver you would like to compare "
                     "(NOTE: Cannot be the same as driver 1): ").lower().strip()
 
