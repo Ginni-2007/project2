@@ -98,75 +98,77 @@ class Graph:
             """
         return d1.get_races_against(d2)
 
-    def compute_head_to_head(self, d1: Driver, d2: Driver) -> dict[str, tuple[int | float, int | float]]:
+    def _update_comparison_stats(self, r1: RaceData, r2: RaceData,
+                                 d1_stats: dict, d2_stats: dict) -> None:
+        """Helper to update finish, win, podium, fastest lap, and position stats."""
+        # Finish
+        if r1.final_position < r2.final_position:
+            d1_stats['finishes_ahead'] += 1
+        elif r2.final_position < r1.final_position:
+            d2_stats['finishes_ahead'] += 1
+
+        # Wins
+        if r1.final_position == 1:
+            d1_stats['wins'] += 1
+        if r2.final_position == 1:
+            d2_stats['wins'] += 1
+
+        # Podiums
+        if r1.final_position in {1, 2, 3}:
+            d1_stats['podium'] += 1
+        if r2.final_position in {1, 2, 3}:
+            d2_stats['podium'] += 1
+
+        # Fastest Lap
+        if r1.fastest_lap_order < r2.fastest_lap_order:
+            d1_stats['fastest_lap'] += 1
+        elif r2.fastest_lap_order < r1.fastest_lap_order:
+            d2_stats['fastest_lap'] += 1
+
+        # Position Change
+        d1_stats['pos_change'] += r1.position_change
+        d2_stats['pos_change'] += r2.position_change
+
+    def compute_head_to_head(self, d1: Driver, d2: Driver) -> dict[str, tuple[float, float]]:
         """
-        Compute the head-to-head strength between two drivers.
-        Returns a dictionary with keys of different categories and values as tuples for driver d1, and d2
-        Preconditions:
-            - driver1 in driver2.neighbours and driver2 in driver1.neighbours
-            - driver1 in driver2.racer_to_races and driver2 in driver1.racer_to_races
+           Compute the head-to-head strength between two drivers.
+           Returns a dictionary with keys of different categories and values as tuples for driver d1, and d2
+           Preconditions:
+               - driver1 in driver2.neighbours and driver2 in driver1.neighbours
+               - driver1 in driver2.racer_to_races and driver2 in driver1.racer_to_races
         """
-        d1_data = {'finishes_ahead': 0, 'wins': 0, 'avg_change_in_pos': 0, 'fastest_lap': 0, 'podium': 0}
-        d2_data = {'finishes_ahead': 0, 'wins': 0, 'avg_change_in_pos': 0, 'fastest_lap': 0, 'podium': 0}
+
+        d1_data = {'finishes_ahead': 0, 'wins': 0, 'pos_change': 0, 'fastest_lap': 0, 'podium': 0}
+        d2_data = {'finishes_ahead': 0, 'wins': 0, 'pos_change': 0, 'fastest_lap': 0, 'podium': 0}
 
         common_races = self.get_shared_races(d1, d2)
-        if common_races == 0:
-            raise ValueError
+        if not common_races:
+            return {}
 
         total_sessions = 0
         for race_id in common_races:
-            # d1.past_races[race_id] is now a list [RaceData, RaceData]
             d1_results = d1.past_races.get(race_id, [])
             d2_results = d2.past_races.get(race_id, [])
 
-            # Compare results session-by-session (Sprint vs Sprint, GP vs GP)
             for r1 in d1_results:
                 for r2 in d2_results:
                     if r1.is_sprint == r2.is_sprint:
                         total_sessions += 1
-
-                        # Logic: Finished Ahead
-                        if r1.final_position < r2.final_position:
-                            d1_data['finishes_ahead'] += 1
-                        elif r2.final_position < r1.final_position:
-                            d2_data['finishes_ahead'] += 1
-
-                        # Logic: Wins
-                        if r1.final_position == 1:
-                            d1_data['wins'] += 1
-                        if r2.final_position == 1:
-                            d2_data['wins'] += 1
-
-                        # Logic: Podiums
-                        if r1.final_position in {1, 2, 3}:
-                            d1_data['podium'] += 1
-                        if r2.final_position in {1, 2, 3}:
-                            d2_data['podium'] += 1
-
-                        # Logic: Fastest Lap
-                        if r1.fastest_lap_order < r2.fastest_lap_order:
-                            d1_data['fastest_lap'] += 1
-                        elif r2.fastest_lap_order < r1.fastest_lap_order:
-                            d2_data['fastest_lap'] += 1
-
-                        # Logic: Change in Position
-                        d1_data['avg_change_in_pos'] += r1.position_change
-                        d2_data['avg_change_in_pos'] += r2.position_change
-
-        if total_sessions == 0:
+                        self._update_comparison_stats(r1, r2, d1_data, d2_data)
+        if total_sessions == 0:  # very rare case this happens but it happens
             return {}
 
-            # Return the exact dictionary keys and calculations you defined
-            # We use total_sessions as the denominator to account for the extra sprint races
         return {
             '# of wins': ((d1_data['wins'] / total_sessions) * 100,
                           (d2_data['wins'] / total_sessions) * 100),
             '# podium finishes': ((d1_data['podium'] / total_sessions) * 100,
                                   (d2_data['podium'] / total_sessions) * 100),
-            '# of times each driver \n finished ahead of each other': (d1_data['finishes_ahead'],
-                                                                       d2_data['finishes_ahead']),
-            'avg change in position': ((d1_data['avg_change_in_pos'] / total_sessions) * 100,
-                                       (d2_data['avg_change_in_pos'] / total_sessions) * 100),
+            '# of times each driver \n finished ahead of each other': (
+                (d1_data['finishes_ahead'] / total_sessions) * 100,
+                (d2_data['finishes_ahead'] / total_sessions) * 100
+            ),
+            'avg change in position': (d1_data['pos_change'] / total_sessions,
+                                       d2_data['pos_change'] / total_sessions),
             'fastest lap count': ((d1_data['fastest_lap'] / total_sessions) * 100,
                                   (d2_data['fastest_lap'] / total_sessions) * 100)
         }
@@ -407,7 +409,6 @@ def update_weight(driver1: Driver, driver2: Driver) -> float:
     common_race_ids = driver1.get_races_against(driver2)
 
     for race_id in common_race_ids:
-        # past_races[race_id] is now a list [RaceData, ...]
         d1_results = driver1.past_races.get(race_id, [])
         d2_results = driver2.past_races.get(race_id, [])
 

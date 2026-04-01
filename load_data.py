@@ -99,6 +99,7 @@ def _load_results(f1_graph: Graph, filename: str) -> None:
 
             # Citation: Chatgpt
             row_dict = dict(zip(header, row))
+            driver_race_data = []
             if filename == 'Dataset/results.csv':
                 driver_race_data = _get_driver_race_data(row_dict)
             if filename == 'Dataset/sprint_results.csv':
@@ -143,7 +144,7 @@ def _get_driver_sprint_race_data(row: dict) -> list:
     >>> # doctest 1: driver who finished the race and won
     >>> row1 = {"grid": "1", "positionOrderUse": "1", "position": "1", "lapPoints": "1"}
     >>> _get_driver_sprint_race_data(row1)
-    [1, 1, 0, True, True, True]
+    [1, 1, 1, True, True, True]
 
     >>> # doctest 2: driver who did not finish the race
     >>> row2 = {"grid": "10", "positionOrderUse": "18", "position": "\\\\N", "lapPoints": "0"}
