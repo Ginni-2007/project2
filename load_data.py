@@ -167,6 +167,7 @@ def _get_driver_sprint_race_data(row: dict) -> list:
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
 
     import python_ta

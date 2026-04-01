@@ -457,6 +457,7 @@ def calculate_one_race(race_data: RaceData) -> int:
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
 
     import python_ta

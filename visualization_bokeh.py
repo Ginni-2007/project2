@@ -17,7 +17,6 @@ expressly prohibited. For more information on copyright for this project, please
 
 This file is Copyright (c) 2026 Huda Anum, Grishma Arun Kumar, Mehal Patel, Jolly Yan
 """
-from numpy.ma.extras import hsplit
 
 import entities
 
@@ -81,4 +80,5 @@ def bar_chart(f1_graph: entities.Graph, d1_id: int, d2_id: int):
 
 if __name__ == '__main__':
     import doctest
+
     doctest.testmod()
