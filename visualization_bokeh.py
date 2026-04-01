@@ -28,6 +28,23 @@ from bokeh.models import HoverTool
 
 
 def bar_chart(f1_graph: entities.Graph, d1_id: int, d2_id: int):
+    """
+       Generate and display a grouped bar chart comparing two Formula 1 drivers.
+
+       This function retrieves two drivers from the given graph and computes their
+       head-to-head statistics using the graph’s comparison method. It then visualizes
+       these statistics using a grouped bar chart, where each metric (e.g., wins,
+       average score, etc.) is shown side-by-side for both drivers.
+
+       The chart is interactive and includes hover functionality to display the
+       metric name and corresponding value.
+
+       Preconditions:
+           - d1_id and d2_id correspond to valid drivers in f1_graph
+           - f1_graph.compute_head_to_head returns a dictionary where each key maps
+             to a list or tuple of two numerical values (one per driver)
+           - All values returned are suitable for percentage-based visualization
+       """
     d1 = f1_graph.get_driver_by_id(d1_id)
     d2 = f1_graph.get_driver_by_id(d2_id)
 
