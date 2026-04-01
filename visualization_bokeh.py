@@ -99,9 +99,3 @@ if __name__ == '__main__':
     import doctest
     doctest.testmod()
 
-    import python_ta
-    python_ta.check_all(config={
-        "extra-imports": ["csv", "bokeh.models", "bokeh.palettes", "bokeh.plotting", "bokeh.transform", "entities"],
-        "max-line-length": 120,
-        'max-nested-blocks': 4
-    })
