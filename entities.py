@@ -194,10 +194,6 @@ class Graph:
         return {self._drivers[driver].codename.lower().strip(): self._drivers[driver].name.lower().strip()
                 for driver in self._drivers}
 
-    # def get_driver_code_names(self) -> list[str]:
-    #     """Return a list of the driver code names"""
-    #     return [self._drivers[driver].codename.lower().strip() for driver in self._drivers]
-
     def get_driver(self, driver_name: str) -> Driver:
         """Return the Driver instance of the driver inputted"""
 
@@ -390,10 +386,10 @@ class Driver:
                              starting_position=driver_race_data[0], final_position=driver_race_data[1],
                              fastest_lap=driver_race_data[2], is_sprint=driver_race_data[3],
                              won_race=driver_race_data[4], finish_race=driver_race_data[5])
-        rid = race.get_id()
-        if rid not in self.past_races:
-            self.past_races[rid] = []
-        self.past_races[rid].append(race_data)
+        race_id = race.get_id()
+        if race_id not in self.past_races:
+            self.past_races[race_id] = []
+        self.past_races[race_id].append(race_data)
 
 
 def update_weight(driver1: Driver, driver2: Driver) -> float:
@@ -458,12 +454,11 @@ def calculate_one_race(race_data: RaceData) -> int:
 
 if __name__ == "__main__":
     import doctest
-
     doctest.testmod()
 
     import python_ta
-
     python_ta.check_all(config={
         "extra-imports": ["csv"],
-        "max-line-length": 120
+        "max-line-length": 120,
+        'max-nested-blocks': 4
     })

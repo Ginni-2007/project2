@@ -26,34 +26,35 @@ import entities
 
 def create_single_driver_graph(graph: entities.Graph, driver_name: str) -> nx.DiGraph:
     """Creates a NetworkX graph for a single driver"""
-    g = nx.DiGraph()
+    network_graph = nx.DiGraph()
     racer = graph.get_driver(driver_name)
 
-    g.add_node(racer.name, codename=racer.codename)
+    network_graph.add_node(racer.name, codename=racer.codename)
     for driver in racer.neighbours:
-        g.add_node(driver.name, codename=driver.codename)
-        g.add_edge(driver.name, racer.name)  # weight=racer.neighbours[driver]
+        network_graph.add_node(driver.name, codename=driver.codename)
+        network_graph.add_edge(driver.name, racer.name)
 
-    return g
+    return network_graph
 
 
-# original idea
 def create_entire_graph(graph: entities.Graph) -> nx.Graph:
     """Creates a NetworkX graph visualizing the entire graph containing all the drivers"""
-    g = nx.Graph()
+    network_graph = nx.Graph()
     racers = graph.get_list_of_drivers()
 
     for driver in racers:
-        g.add_node(driver.name, codename=driver.codename)
+        network_graph.add_node(driver.name, codename=driver.codename)
 
     for driver in racers:
         for driver_neighbour in driver.neighbours:
-            if not g.has_node(driver_neighbour.name):
-                g.add_node(driver_neighbour.name, codename=driver_neighbour.codename)
+            if not network_graph.has_node(driver_neighbour.name):
+                network_graph.add_node(driver_neighbour.name, codename=driver_neighbour.codename)
 
-            g.add_edge(driver.name, driver_neighbour.name)
+            network_graph.add_edge(driver.name, driver_neighbour.name)
 
-    return g
+    return network_graph
+
+# Citation: Parts of Assignment 3, “a3_part2_recommendations.py”, were referenced for visualization_graph
 
 
 def visualize_graph(graph_nx: nx.Graph | nx.DiGraph, layout: str = 'spring_layout') -> None:
@@ -78,8 +79,6 @@ def visualize_graph(graph_nx: nx.Graph | nx.DiGraph, layout: str = 'spring_layou
     trace3 = Scatter(x=x_edges,
                      y=y_edges,
                      mode='lines',
-                     # I set color to light gray for the edges but we
-                     # can change it later
                      line=dict(color='rgb(210,210,210)', width=1),
                      # to remove the extra information abt coordinates
                      # popping up on the graph
@@ -116,5 +115,4 @@ def visualize_graph(graph_nx: nx.Graph | nx.DiGraph, layout: str = 'spring_layou
 
 if __name__ == '__main__':
     import doctest
-
     doctest.testmod()

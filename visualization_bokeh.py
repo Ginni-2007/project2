@@ -27,7 +27,7 @@ from bokeh.transform import factor_cmap
 from bokeh.models import HoverTool
 
 
-def bar_chart(f1_graph: entities.Graph, d1_id: int, d2_id: int):
+def bar_chart(f1_graph: entities.Graph, d1_id: int, d2_id: int) -> None:
     """
        Generate and display a grouped bar chart comparing two Formula 1 drivers.
 
@@ -97,5 +97,11 @@ def bar_chart(f1_graph: entities.Graph, d1_id: int, d2_id: int):
 
 if __name__ == '__main__':
     import doctest
-
     doctest.testmod()
+
+    import python_ta
+    python_ta.check_all(config={
+        "extra-imports": ["csv", "bokeh.models", "bokeh.palettes", "bokeh.plotting", "bokeh.transform", "entities"],
+        "max-line-length": 120,
+        'max-nested-blocks': 4
+    })
