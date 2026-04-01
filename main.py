@@ -1,6 +1,6 @@
 """
 CSC111 Project 2:- Beyond the Podium: A battle between F1’s greatest
-========================================================
+===============================================================================================
 
 This module serves as the main entry point for the F1 driver head-to-head
 analysis. It provides an interactive command-line interface that allows
@@ -10,7 +10,7 @@ head-to-head statistics. The system integrates data loading, network analysis,
 and interactive visualizations.
 
 Copyright and Usage Information
-===============================
+=================================================================================================
 
 This file is provided solely for the personal and private use of students
 taking CSC111 at the University of Toronto St. George campus. All forms of

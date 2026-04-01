@@ -1,12 +1,13 @@
 """
 CSC111 Project 2: F1 Driver Comparison - Data Loading Module
+====================================================================================================
 
 This module contains functions to load Formula 1 data from CSV files and construct
 a graph-based representation of drivers and races. It processes driver details,
 race data, and race results to use for head-to-head performance analysis.
 
 Copyright and Usage Information
-===============================
+===============================================================================================
 
 This file is provided solely for the personal and private use of students
 taking CSC111 at the University of Toronto St. George campus. All forms of

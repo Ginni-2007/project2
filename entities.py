@@ -1,6 +1,6 @@
 """
 CSC111 Project 2:- Beyond the Podium: A battle between F1’s greatest
-========================================================
+====================================================================================================
 
 This module defines the core data structures for representing and analyzing
 head-to-head competition between Formula 1 drivers. It includes Graph, Driver,
@@ -9,7 +9,7 @@ on shared race participation, enabling computation of comparative performance
 metrics.
 
 Copyright and Usage Information
-===============================
+======================================================================================================
 
 This file is provided solely for the personal and private use of students
 taking CSC111 at the University of Toronto St. George campus. All forms of

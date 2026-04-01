@@ -1,6 +1,6 @@
 """
 CSC111 Project 2:- Beyond the Podium: A battle between F1’s greatest
-========================================================
+=============================================================================================
 
 This module implements interactive bar chart visualizations using Bokeh to
 display comparative performance metrics between two Formula 1 drivers. It loads
@@ -8,7 +8,7 @@ the graph data and generates a comprehensive visual comparison of statistics
 including wins, podium finishes, finishing positions, and fastest laps.
 
 Copyright and Usage Information
-===============================
+==============================================================================================
 
 This file is provided solely for the personal and private use of students
 taking CSC111 at the University of Toronto St. George campus. All forms of
