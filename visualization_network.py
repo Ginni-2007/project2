@@ -112,3 +112,8 @@ def visualize_graph(graph_nx: nx.Graph | nx.DiGraph, layout: str = 'spring_layou
         plot_bgcolor='white'  # Set background to white for a cleaner look
     )
     fig.show()
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()

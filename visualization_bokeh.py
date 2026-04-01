@@ -79,3 +79,6 @@ def bar_chart(f1_graph: entities.Graph, d1_id: int, d2_id: int):
     show(p)
 
 
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()

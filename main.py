@@ -44,8 +44,9 @@ def choose_drivers(original_graph: entities.Graph) -> tuple[int, int]:
     available_codes = original_graph.get_dict_of_driver_names()
     available_names = available_codes.values()
 
-    driver1 = input("\nEnter name of the first driver you would like to compare: ").lower().strip()
-    while driver1 not in available_names and driver1 not in available_codes and driver1 != 'exit':
+    driver1 = input("\nEnter name of the first driver you would like to compare "
+                    "(You may enter the full name or driver code name): ").lower().strip()
+    while (driver1 not in available_names and driver1 not in available_codes) and driver1 != 'exit':
         print("That was an invalid name; try again.")
         driver1 = input("\nEnter name: ").lower().strip()
 
@@ -65,6 +66,7 @@ def choose_drivers(original_graph: entities.Graph) -> tuple[int, int]:
     available_names = available_codes.values()
 
     driver2 = input("\nEnter name of the second driver you would like to compare "
+                    "(You may enter the full name or driver code name)"
                     "(NOTE: Cannot be the same as driver 1): ").lower().strip()
 
     while ((driver2 not in available_names and driver2 not in available_codes) or
