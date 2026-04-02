@@ -54,6 +54,7 @@ def create_entire_graph(graph: entities.Graph) -> nx.Graph:
 
     return network_graph
 
+
 # Citation: Parts of Assignment 3, “a3_part2_recommendations.py”, were referenced for visualization_graph
 
 
@@ -115,4 +116,5 @@ def visualize_graph(graph_nx: nx.Graph | nx.DiGraph, layout: str = 'spring_layou
 
 if __name__ == '__main__':
     import doctest
+
     doctest.testmod()
