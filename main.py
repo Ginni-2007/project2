@@ -128,7 +128,7 @@ if __name__ == "__main__":
                 print("\n" + "=" * 60)
                 print(f"\nHEAD-TO-HEAD STATS: {len(common_races)} shared races")
                 print("-" * 50)
-                print(f"{'Metric':<20} | {d1.name:<15} | {d2.name:<15}")
+                print(f"{'Metric':<20}        | {d1.name:<15} | {d2.name:<15}")
                 print("-" * 60)
                 for metric, (p1, p2) in stats.items():
                     print(f"{metric:<20} | {p1:>14.1f}% | {p2:>14.1f}%")

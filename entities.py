@@ -159,18 +159,18 @@ class Graph:
             return {}
 
         return {
-            '# of wins': ((d1_data['wins'] / total_sessions) * 100,
-                          (d2_data['wins'] / total_sessions) * 100),
-            '# podium finishes': ((d1_data['podium'] / total_sessions) * 100,
-                                  (d2_data['podium'] / total_sessions) * 100),
-            '# of times each driver \n finished ahead of each other': (
+            '# of wins                  ': ((d1_data['wins'] / total_sessions) * 100,
+                                            (d2_data['wins'] / total_sessions) * 100),
+            '# podium finishes          ': ((d1_data['podium'] / total_sessions) * 100,
+                                            (d2_data['podium'] / total_sessions) * 100),
+            '# of times each driver \n finished ahead \nof each other              ': (
                 (d1_data['finishes_ahead'] / total_sessions) * 100,
                 (d2_data['finishes_ahead'] / total_sessions) * 100
             ),
-            'avg change in position': (d1_data['pos_change'] / total_sessions,
-                                       d2_data['pos_change'] / total_sessions),
-            'fastest lap count': ((d1_data['fastest_lap'] / total_sessions) * 100,
-                                  (d2_data['fastest_lap'] / total_sessions) * 100)
+            'avg change in position     ': (d1_data['pos_change'] / total_sessions,
+                                            d2_data['pos_change'] / total_sessions),
+            '# of fastest laps amongst \neach other                 ': ((d1_data['fastest_lap'] / total_sessions) * 100,
+                                                                        (d2_data['fastest_lap'] / total_sessions) * 100)
         }
 
     def has_driver(self, driver_id: int) -> bool:
