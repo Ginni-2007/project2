@@ -1,5 +1,5 @@
 """
-CSC111 Project 2: F1 Driver Comparison - Data Loading Module
+CSC111 Project 2:- Beyond the Podium: A battle of dominance between F1’s greatest
 ====================================================================================================
 
 This module contains functions to load Formula 1 data from CSV files and construct

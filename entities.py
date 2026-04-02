@@ -1,5 +1,5 @@
 """
-CSC111 Project 2:- Beyond the Podium: A battle between F1’s greatest
+CSC111 Project 2:- Beyond the Podium: A battle of dominance between F1’s greatest
 ====================================================================================================
 
 This module defines the core data structures for representing and analyzing
